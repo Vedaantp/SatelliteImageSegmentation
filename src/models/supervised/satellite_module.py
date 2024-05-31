@@ -24,14 +24,13 @@ class ESDSegmentation(pl.LightningModule):
         super(ESDSegmentation, self).__init__()
         # use self.save_hyperparameters to ensure that the module will load
         self.save_hyperparameters()
-        # store in_channels and out_channels
-        self.in_channels = in_channels
-        self.out_channels = out_channels
+        # store learning_rate
         self.learning_rate = learning_rate
-        # if the model type is deep_lab, initalize a deepLabV3 as self.model
+
+        # initialize model based on model_type str:
         if model_type == "deep_lab" or model_type.lower() == "segmentationcnn":
             self.model = DeepLabV3Module(in_channels=in_channels, out_channels=out_channels, **model_params)
-        elif model_type.lower() == "unet":         # if the model type is unet, initialize a unet as self.model
+        elif model_type.lower() == "unet":
             self.model = UNet(in_channels=in_channels, out_channels=out_channels, **model_params)
         else:
             raise ValueError(f"Unsupported model type: {model_type}")
