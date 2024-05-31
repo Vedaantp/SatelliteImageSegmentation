@@ -4,9 +4,8 @@ from torch.optim import Adam
 from torch import nn
 import torchmetrics
 
-from src.models.supervised.segmentation_cnn import SegmentationCNN
 from src.models.supervised.unet import UNet
-from src.models.supervised.resnet_transfer import FCNResnetTransfer
+from src.models.supervised.deepLabV3 import DeepLabV3Module
 
 
 class ESDSegmentation(pl.LightningModule):
@@ -29,19 +28,19 @@ class ESDSegmentation(pl.LightningModule):
         self.in_channels = in_channels
         self.out_channels = out_channels
         self.learning_rate = learning_rate
-        # if the model type is segmentation_cnn, initalize a segmentation_cnn as self.model
-        if model_type == "segmentation_cnn" or model_type.lower() == "segmentationcnn":
-            self.model = SegmentationCNN(in_channels=in_channels, out_channels=out_channels, **model_params)
+        # if the model type is deep_lab, initalize a deepLabV3 as self.model
+        if model_type == "deep_lab" or model_type.lower() == "segmentationcnn":
+            self.model = DeepLabV3Module(in_channels=in_channels, out_channels=out_channels, **model_params)
         elif model_type.lower() == "unet":         # if the model type is unet, initialize a unet as self.model
             self.model = UNet(in_channels=in_channels, out_channels=out_channels, **model_params)
-        elif model_type == "fcn_resnet_transfer" or model_type.lower() == "fcnresnettransfer": # if the model type is fcn_resnet_transfer, initialize a fcn_resnet_transfer as self.model
-            self.model = FCNResnetTransfer(in_channels=in_channels, out_channels=out_channels, **model_params)
         else:
             raise ValueError(f"Unsupported model type: {model_type}")
         
         # initialize the accuracy metrics for the semantic segmentation task
         self.train_accuracy = torchmetrics.Accuracy(task='multiclass', num_classes=out_channels)
         self.val_accuracy = torchmetrics.Accuracy(task='multiclass', num_classes=out_channels)
+        self.f1_score = torchmetrics.classification.MulticlassF1Score(num_classes=out_channels, average="weighted")
+
     def forward(self, X):
         X = torch.nan_to_num(X)
         # evaluate self.model
@@ -80,6 +79,7 @@ class ESDSegmentation(pl.LightningModule):
         # calculate validation loss
         val_loss = nn.CrossEntropyLoss()(predictions, mask.long())
         self.log("val_loss", val_loss, on_step=False, on_epoch=True, prog_bar=True, logger=True)
+        self.log("f1_score", self.f1_score(preds, mask.squeeze(1)), on_step=False, on_epoch=True, prog_bar=True, logger=True)
         
         return val_loss
     
