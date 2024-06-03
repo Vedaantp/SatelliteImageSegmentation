@@ -5,8 +5,9 @@ from torch import nn
 import torchmetrics
 
 from src.models.supervised.unet import UNet
-
-
+import segmentation_models_pytorch as smp
+from src.models.supervised.unet_3plus import UNet_3Plus
+ 
 class ESDSegmentation(pl.LightningModule):
     def __init__(
         self,
@@ -29,6 +30,8 @@ class ESDSegmentation(pl.LightningModule):
         # initialize model based on model_type str:
         if model_type.lower() == "unet":
             self.model = UNet(in_channels=in_channels, out_channels=out_channels, **model_params)
+        elif model_type.lower() == "unet3+":
+            self.model = UNet_3Plus(in_channels=in_channels, n_classes=out_channels)
         else:
             raise ValueError(f"Unsupported model type: {model_type}")
         
