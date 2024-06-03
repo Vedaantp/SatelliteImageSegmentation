@@ -18,7 +18,7 @@ class SatelliteType(Enum):
 
 ROOT = Path.cwd()
 PROJ_NAME = "CS175-spring-2024"
-MODEL = "FCNResnetTransfer"  # default, valid values are ["UNet", "SegmentationCNN", "FCNResnetTransfer"] # fmt: skip
+MODEL = "deep_lab"  # default, valid values are ["UNet", "SegmentationCNN", "FCNResnetTransfer"] # fmt: skip
 
 
 @dataclass
@@ -32,34 +32,34 @@ class ESDConfig:
         SatelliteType.S2: [
             "12",
             "11",
-            "09",
-            "8A",
+            # "09",
+            # "8A",
             "08",
-            "07",
-            "06",
-            "05",
+            # "07",
+            # "06",
+            # "05",
             "04",
             "03",
             "02",
-            "01",
+            # "01",
         ],
         SatelliteType.LANDSAT: [
             "11",
             "10",
-            "9",
-            "8",
+            # "9",
+            # "8",
             "7",
             "6",
             "5",
             "4",
             "3",
             "2",
-            "1",
+            # "1",
         ],
         SatelliteType.VIIRS_MAX_PROJ: ["0"],
     }
 
-    accelerator: str = "cpu"
+    accelerator: str = "mps"
     batch_size: int = 2
     depth: int = 2
     devices: int = 1
