@@ -5,7 +5,6 @@ from torch import nn
 import torchmetrics
 
 from src.models.supervised.unet import UNet
-import segmentation_models_pytorch as smp
 from src.models.supervised.unet_3plus import UNet_3Plus
  
 class ESDSegmentation(pl.LightningModule):
