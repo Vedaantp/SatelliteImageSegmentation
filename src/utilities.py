@@ -25,6 +25,7 @@ MODEL = "deep_lab"  # default, valid values are ["UNet", "SegmentationCNN", "FCN
 class ESDConfig:
     processed_dir: Path = ROOT / "data" / "processed"
     raw_dir: Path = ROOT / "data" / "raw" / "Train"
+    checkpoint_file: str = ""
     results_dir: Path = ROOT / "data" / "predictions" / MODEL
     selected_bands = {
         SatelliteType.VIIRS: ["0"],
