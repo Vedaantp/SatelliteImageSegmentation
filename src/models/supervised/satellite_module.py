@@ -52,6 +52,11 @@ class ESDSegmentation(pl.LightningModule):
         predictions = self(sat_img)
         # calculate cross entropy loss
         loss = nn.CrossEntropyLoss()(predictions, mask.long())
+
+        #apply l1 regularization
+        l1_lambda = 0.001
+        l1_norm = sum(p.abs().sum() for p in self.parameters())
+        loss = loss + l1_lambda * l1_norm
         
         # calculate training accuracy
         preds = torch.argmax(predictions, dim=1)
