@@ -60,17 +60,17 @@ class ESDConfig:
     }
 
     accelerator: str = "mps"
-    batch_size: int = 2
+    batch_size: int = 4
     depth: int = 2
     devices: int = 1
-    embedding_size: int = 64
+    embedding_size: int = 256
     in_channels: int = 99  # num_dates * num_bands
     kernel_size: int = 3
-    learning_rate: float = 1e-3
+    learning_rate: float = 0.0001
     max_epochs: int = 1
     model_path: Path = ROOT / "models" / MODEL / "last.ckpt"
     model_type: str = MODEL
-    n_encoders: int = 2
+    n_encoders: int = 3
     num_workers: int = 6
     out_channels: int = 4  # 4 out channels for our 4 classes
     pool_sizes: str = "5,5,2"
