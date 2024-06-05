@@ -6,8 +6,8 @@ import torchmetrics
 
 from src.models.supervised.unet import UNet
 from src.models.supervised.deepLabV3 import DeepLabV3Module
-
-
+from src.models.supervised.unet_3plus import UNet_3Plus
+ 
 class ESDSegmentation(pl.LightningModule):
     def __init__(
         self,
@@ -28,10 +28,12 @@ class ESDSegmentation(pl.LightningModule):
         self.learning_rate = learning_rate
 
         # initialize model based on model_type str:
-        if model_type == "deep_lab" or model_type.lower() == "segmentationcnn":
-            self.model = DeepLabV3Module(in_channels=in_channels, out_channels=out_channels, **model_params)
-        elif model_type.lower() == "unet":
+        if model_type.lower() == "unet":
             self.model = UNet(in_channels=in_channels, out_channels=out_channels, **model_params)
+        elif model_type.lower() == "unet3+":
+            self.model = UNet_3Plus(in_channels=in_channels, n_classes=out_channels)
+        elif model_type == "deep_lab":
+            self.model = DeepLabV3Module(in_channels=in_channels, out_channels=out_channels, **model_params)
         else:
             raise ValueError(f"Unsupported model type: {model_type}")
         
