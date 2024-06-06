@@ -14,11 +14,10 @@ Developed by Brown Rice: [Levi Ramirez](https://github.com/Levi-Ramirez), [Shadi
 ## Goal
 **Satellite Society and Electricity Segmentation** targets semantic segmentation, seeking to adapt & use multiple models to achieve high accuracy classification. We will compare the performance of select models against a base UNet model. The model we want to compare UNet to is still in production. However, we expect it to be either UNet3+ or DeepLabV3.
 
-## Instillation
+## Installation
  > TODO PR2
 
 ## Getting Started
-> TODO PR2: check sample sent, include details on how to run Unet + how to adjust parameters
 
 ### Step 0, RECOMMENDED: Set up Virtual Project Environment
 To keep the build clean, we recommend using a virtual environment in order to have a reproducible and stable envrionment.
@@ -50,7 +49,8 @@ Can use Wandb for experiment tracking, visualization, and collaboration in this 
 ### Step 3:
 Download the dataset, place it into a directory. Put it in a directory called `data/raw`. The full path after download and placing the data here should be `data/raw/Train`.
 
-Now you should be ready to run the commands to run the models to train on this dataset. Look at the Training section below to see command to train
+Now you should be ready to run the commands to run the models to train on this dataset. Look at the [Training](#training)
+ section below to see command to train.
 
 ## Models 
 ### UNet
@@ -87,28 +87,22 @@ This model uses what is called a "skip connection", these are inspired by the no
 > TODO PR2: Explain the data set with sample images. Explain the satellites
 
 ## Training
-We will train the models using the model architectures defined above in conjunction with the PyTorch Lightning Module for ease of running the training step in `train.py.` To monitor model training make sure to make an account with Weights and Biases for yourself and then create a team. For details on how to get started see [How to Use W&B Teams For Your University Machine Learning Projects for Free](https://wandb.ai/ivangoncharov/wandb-teams-for-students/reports/How-to-Use-W-B-Teams-For-Your-University-Machine-Learning-Projects-For-Free---VmlldzoxMjk1Mjkx).
+We will train the models using the model architectures defined above in conjunction with the PyTorch Lightning Module for ease of running the training step in `train.py`. Model training will be monitored using Weights and Biases (as signed up for in the Setup section).
 
 ### `ESDConfig` Python Dataclass
-In `src/utilities.py` we have created an `ESDConfig` dataclass to store all the paths and parameters for experimenting with the training step. If you notice, in the main function of `scripts/train.py`, `scripts/evaluate.py`, and `scripts/train_sweeps.py` we have provided you with code that utilize the library `argparse` which takes command line arguments using custom flags that allow the user to overwrite the default configurations defined in the dataclass we provided. When running train, for example, if you would like to run training for the architecture `SegmentationCNN` for five epochs you would run:
+In `src/utilities.py` we have created an `ESDConfig` dataclass to store all the paths and parameters for experimenting with the training step. These default parameters can be overwritten with added options when executing the `scripts.train` by the command line.
+- To get a list of the options: `python -m scripts.train -help`
 
-`python -m scripts.train --model_type=SegmentationCNN --max_epochs=5`
+For example, if you would like to run training for the architecture UNet for seven epochs you would run:
 
-Here is more information on [`argparse`](https://docs.python.org/3/howto/argparse.html).
+`python -m scripts.train --model_type=unet --max_epochs=7`
 
 ### Hyperparameter Sweeps
-We will be using Weights and Biases Sweeps by configuring a yaml file called `sweeps.yml` in order to automate hyperparameter search over metrics such as batch size, epochs, learning rate, and optimizer. You may also experiment with the number of encoders and decoders you would like to add to your model architecture given that you are sensitive to the dimensions of your input image and the dimensions of the output prediction with respect to the ground truth. Some useful articles on how to perform sweeps and use the information to choose the best hyperparameter settings for your model can be found:
-- [Tune Hyperparameters](https://docs.wandb.ai/guides/sweeps)
-- [Running Hyperparameter Sweeps to Pick the Best Model](https://wandb.ai/wandb_fc/articles/reports/Running-Hyperparameter-Sweeps-to-Pick-the-Best-Model--Vmlldzo1NDQ0OTIy)
+- `sweeps.yml` in order to automate hyperparameter search over metrics such as batch size, epochs, learning rate, and optimizer.
 
-To run training with the hyperparameter sweeps you define in `sweeps.yml` please run `train_sweeps.py --sweep_file=sweeps.yml` provided for you.
+- To run training with the hyperparameter sweeps you define in `sweeps.yml`, run `train_sweeps.py --sweep_file=sweeps.yml` provided for you.
 
-## Validation
-You will run validation using the script `evaluate.py` where you will load the model weights from the last checkpoint and make a forward pass through your model in order to generate prediction masks. Use `ESDConfig` dataclass in `utilities.py` to set the default configuration for the validation loop when arguments are not passed via command line.
-
-### Visualization: Restitching Predictions to Compare with Ground Truth
-`evaluate.py` calls functions in `visualization/restitch_plot.py` which restitches the predicted subtiles and groundtruth back to the original 16x16 dimensions for plotting purposes using the same colormap as defined in the IEEE GRSS ESD 2021 Competition.
-
+- These sweeps will be logged in your wandb account
 
 ## Liscense
 > TODO PR2:
