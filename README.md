@@ -11,53 +11,47 @@ The final project for UCI's CS 175: Project in Artificial Intelligence.
 
 Developed by Brown Rice: [Levi Ramirez](https://github.com/Levi-Ramirez), [Shadi Bitaraf](https://github.com/ShadiBitaraf), [Vedaant Patel](https://github.com/Vedaantp), [Benjamin Wong](https://github.com/chiyeon)
 
+NOTE: anything that is in '[ ]' is in progress and will be delivered in the final PR.
+
 ## Goal
-**Satellite Society and Electricity Segmentation** targets semantic segmentation, seeking to adapt & use multiple models to achieve high accuracy classification. We will compare the performance of select models against a base UNet model. The model we want to compare UNet to is still in production. However, we expect it to be either UNet3+ or DeepLabV3.
+**Society and Electricity Satellite Segmentation** targets semantic segmentation, seeking to adapt & use multiple models to achieve high classification accuracy  on the IEEE GRSS 2021 Data Fusion Contest dataset. We will compare the performance of [select models] against a base UNet model. The model we want to compare UNet to is still in production. However, we expect it to be either UNet3+ or DeepLabV3.
 
 ## Installation
 
-The code requires `python>=3.11.3`, as well as `pytorch>=2.3` and `torchvision>=0.18`. Please follow the instructions [here](https://pytorch.org/get-started/locally/) to install both PyTorch and TorchVision dependencies.
+The code requires `python>=3.11.3`, as well as `pytorch>=2.3` and `torchvision>=0.18`. Please follow the instructions [here](https://realpython.com/installing-python/) to install both python if you don't have it installed already. All other dependencies (including pytorch) will be installed using the following steps:
 
 1. Clone the this repository locally and install with
 
 `git clone https://github.com/cs175cv-s2024/final-project-brown-rice.git`
 
-2. Install the required packages and dependencies:
+2. (RECOMMENDED) We recommend using a virtual environment in order to have a reproducible and stable envrionment.
+
+   (a) Create a virtual environment: `python3 -m venv esdenv`
+
+   (b) Activate the virtual environment:
+   * On macOS and Linux: `source esdenv/bin/activate`
+   * On Windows: `.\esdenv\Scripts\activate`
+
+3. Install the required packages and dependencies:
    `pip install -r requirements.txt`
+
+To deactivate a virtual environment, type `deactivate` in the command line.
 
 ## Getting Started
 
-### Step 0, RECOMMENDED: Set up Virtual Project Environment
-To keep the build clean, we recommend using a virtual environment in order to have a reproducible and stable envrionment.
-
-1. Create a virtual environment:
-   
-   `python3 -m venv esdenv`
-2. Activate the virtual environment:
-   * On macOS and Linux:
-  
-        `source esdenv/bin/activate`
-   * On Windows:
-  
-        `.\esdenv\Scripts\activate`
-
-To deactivate the virtual environment, type `deactivate`.
-
-### Step 1: Set up Virtual Project Environment
-Install the required packages:
-    `pip install -r requirements.txt`
-### Step 2: 
-Use Wandb for experiment tracking, visualization, and collaboration in this project. Follow this page for [logging in](https://wandb.auth0.com/login?state=hKFo2SB4VS1WN2dXa0k4OHhTYndvelBiOGRMckRUWl9feGJ5VaFupWxvZ2luo3RpZNkgYTVDY0lUcXBPSVJsUVNSOXhWOTFMenpsRnZTcFBWUEajY2lk2SBWU001N1VDd1Q5d2JHU3hLdEVER1FISUtBQkhwcHpJdw&client=VSM57UCwT9wbGSxKtEDGQHIKABHppzIw&protocol=oauth2&nonce=TmpIZ2NwflJqWVFCT0VvMA%3D%3D&redirect_uri=https%3A%2F%2Fapi.wandb.ai%2Foidc%2Fcallback&response_mode=form_post&response_type=id_token&scope=openid%20profile%20email) or look at [Quickstart guide](https://docs.wandb.ai/quickstart).
+### Step 1: 
+Use Wandb for experiment tracking, visualization, and collaboration in this project. Setup your account using [Quickstart guide](https://docs.wandb.ai/quickstart).
 1. run `wandb login`
-2. Input W&B API key into the prompt. If you don't have an account, you'll need to sign up first on their website. Once you've logged in and authenticated your account, you can start using 
-3. Input your project name associated with your account in train.py with the line wandb.init(project="PROJECT_NAME"), replacing PROJECT_NAME with the name of your project.
+2. Input W&B API key into the prompt. If you don't have an account, you'll need to sign up first on their website. Once you've logged in and authenticated your account, you can start using Wandb to track the weights and biases of your ML runs.
+3. Input your project name associated with your account in train.py in the line with the function wandb.init(project="PROJECT_NAME"), replacing PROJECT_NAME with the name of your project.
 
+
+### Step 2:
+You can download the dataset [here](https://drive.google.com/file/d/1mVDV9NkmyfZbkSiD5lkskv_MwOuYxiog/view). Download the dataset, place it in a directory called `data/raw`. The full path after download and placing the data here should be `data/raw/Train`.
 
 ### Step 3:
-Download the dataset, place it into a directory. Put it in a directory called `data/raw`. The full path after download and placing the data here should be `data/raw/Train`.
-
-Now you should be ready to run the commands to run the models to train on this dataset. Look at the [Training](#training)
- section below to see command to train.
+Now you should be ready to run the commands to train the models on this dataset. Look at the [Training](#training)
+ section below to see the training commmand options.
 
 ## Models 
 ### UNet
@@ -101,8 +95,7 @@ Note: The F1 score was set to be logged later on in the sweeps that were ran, so
 
 The datasets used in this project are derived from the IEEE GRSS 2021 Data Fusion Contest. The dataset comprises satellite imagery data from multiple satellites, each with unique characteristics and data types. For more information, visit the [IEEE GRSS Data Fusion Contest page](https://www.grss-ieee.org/community/technical-committees/2021-ieee-grss-data-fusion-contest-track-dse/). You can download the dataset [here](https://drive.google.com/file/d/1mVDV9NkmyfZbkSiD5lkskv_MwOuYxiog/view)
 
-The dataset includes:
-
+### The dataset includes:
 ### Sentinel-1 Polarimetric SAR Dataset
 
 - Channels: 2 (VV and VH polarization)
@@ -174,10 +167,10 @@ An additional reference file (groundTruthRGB.png) is provided at 10m resolution 
 
 
 ## Training
-We will train the models using the model architectures defined above in conjunction with the PyTorch Lightning Module for ease of running the training step in `train.py`. Model training will be monitored using Weights and Biases (as signed up for in the Setup section).
+We will train the models using the model architectures defined in the [Models](#models) section in conjunction with the PyTorch Lightning Module for ease of running the training step in `train.py`. Model training will be monitored using Weights & Biases (as signed up for in the [Getting Started](#getting-started) section).
 
 ### `ESDConfig` Python Dataclass
-In `src/utilities.py` we have created an `ESDConfig` dataclass to store all the paths and parameters for experimenting with the training step. These default parameters can be overwritten with added options when executing the `scripts.train` by the command line.
+In `src/utilities.py` we have created an `ESDConfig` dataclass to store all the paths and parameters for experimenting with the training step. These default parameters can be overwritten with added options when executing the `scripts.train` in the command line.
 - To get a list of the options: `python -m scripts.train -help`
 
 For example, if you would like to run training for the architecture UNet for seven epochs you would run:
@@ -190,6 +183,12 @@ For example, if you would like to run training for the architecture UNet for sev
 - To run training with the hyperparameter sweeps you define in `sweeps.yml`, run `train_sweeps.py --sweep_file=sweeps.yml` provided for you.
 
 - These sweeps will be logged in your wandb account
+
+- To run sweeps on a differnt model, change the MODEL name in `src/utilities.py`. Current default is UNet
+
+   example:
+
+      MODEL = 'MODEL_NAME'
 
 ## Liscense
 
