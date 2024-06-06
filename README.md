@@ -212,3 +212,15 @@ This project is licensed under the [MIT License](LICENSE)
 [Wandb Quickstart](https://docs.wandb.ai/quickstart)
 
 [PR3: add more sources pertaining to your new ML model + l1 regularization]
+
+## Citing this project
+
+If you use **Society and Electricity Satellite Segmentation: A comparison of UNet with [a select model: TBD]** in your research, please use the following BibTeX entry:
+
+```bibtex
+@misc{final-project-brown-rice,
+  title={Society and Electricity Satellite Segmentation: A comparison of UNet with [a select model: TBD]},
+  author={Bitaraf, Shadi and Patel, Vedaant and Ramirez, Levi and Wong, Benjamin},
+  howpublished = {\url{https://github.com/cs175cv-s2024/final-project-brown-rice}},
+  year={2024}
+}
