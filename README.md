@@ -41,7 +41,7 @@ Install the required packages:
     `pip install -r requirements.txt`
 ### Step 2: 
 PUT INFO FOR LOGGING INTO WANDB
-Can use Wandb for experiment tracking, visualization, and collaboration in this project.
+Can use Wandb for experiment tracking, visualization, and collaboration in this project. Follow this page for [logging in](https://wandb.auth0.com/login?state=hKFo2SB4VS1WN2dXa0k4OHhTYndvelBiOGRMckRUWl9feGJ5VaFupWxvZ2luo3RpZNkgYTVDY0lUcXBPSVJsUVNSOXhWOTFMenpsRnZTcFBWUEajY2lk2SBWU001N1VDd1Q5d2JHU3hLdEVER1FISUtBQkhwcHpJdw&client=VSM57UCwT9wbGSxKtEDGQHIKABHppzIw&protocol=oauth2&nonce=TmpIZ2NwflJqWVFCT0VvMA%3D%3D&redirect_uri=https%3A%2F%2Fapi.wandb.ai%2Foidc%2Fcallback&response_mode=form_post&response_type=id_token&scope=openid%20profile%20email).
 1. run `wandb login`
 2. Input W&B API key into the prompt. If you don't have an account, you'll need to sign up first on their website. Once you've logged in and authenticated your account, you can start using 
 3. Input your project name associated with your account in train.py with the line wandb.init(project="PROJECT_NAME"), replacing PROJECT_NAME with the name of your project.
@@ -51,8 +51,6 @@ Can use Wandb for experiment tracking, visualization, and collaboration in this 
 Download the dataset, place it into a directory. Put it in a directory called `data/raw`. The full path after download and placing the data here should be `data/raw/Train`.
 
 Now you should be ready to run the commands to run the models to train on this dataset. Look at the Training section below to see command to train
-
-
 
 ## Models 
 ### UNet
