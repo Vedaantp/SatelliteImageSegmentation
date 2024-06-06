@@ -32,13 +32,20 @@ This model uses what is called a "skip connection", these are inspired by the no
 
 ## Performance
 ### UNet
-> TODO PR2: place training results as well as sample segmentation images. Write a brief descriptoin of results. Also include the training parameters + bands/satellites used.
+The UNet model performed well and achieved an accuracy high of 67% on the validation set. For the runs 1-4, Sentinel 1 and Sentinel 2 bands were used. For run 5, Sentinel 1, Sentinel 2, VIIRS, and VIIRS MAX Projection were used. For run 6, all bands were used.
 
-| Epochs | F1 Score | Training Accuracy | Training Loss | Validation Accuracy | Validation Loss |
-| ------ | -------- | ----------------- | ------------- | ------------------- | --------------- |
-| 10 | 0.0 | 0.0 | 0 | 0.0 | 0 |
-| 20 | 0.0 | 0.0 | 0 | 0.0 | 0 |
-| 30 | 0.0 | 0.0 | 0 | 0.0 | 0 |
+> TODO need to import pictures of the predicted values.
+
+Note: The F1 score was set to be logged later on in the sweeps that were ran, so some of the runs do not include an F1 score.
+
+| Epochs | F1 Score | Training Accuracy | Training Loss | Validation Accuracy | Validation Loss | Embedding Size | In Channels | Learning Rate | N Encoders |
+| ------ | -------- | ----------------- | ------------- | ------------------- | --------------- | -------------- | ----------- | ------------- | ---------- |
+| 5 | NA | 0.59 | 0.84 | 0.56 | 0.90 | 128 | 56 | 0.002917 | 5 |
+| 5 | NA | 0.65 | 0.8 | 0.61 | 0.98 | 64 | 56 | 0.07799 | 4 |
+| 10 | NA | 0.67 | 0.77 | 0.63 | 0.88 | 32 | 56 | 0.0529 | 5 |
+| 10 | NA | 0.68 | 0.75 | 0.64 | 0.88 | 256 | 56 | 0.08564 | 5 |
+| 25 | 0.58 | 0.66 | 0.79 | 0.62 | 0.91 | 64 | 66 | 0.08762 | 4 |
+| 25 | 0.66 | 0.74 | 0.59 | 0.67 | 0.76 | 256 | 99 | 0.0005 | 5 |
 
 
 ### [selected model: TBD]
