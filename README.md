@@ -15,7 +15,15 @@ Developed by Brown Rice: [Levi Ramirez](https://github.com/Levi-Ramirez), [Shadi
 **Satellite Society and Electricity Segmentation** targets semantic segmentation, seeking to adapt & use multiple models to achieve high accuracy classification. We will compare the performance of select models against a base UNet model. The model we want to compare UNet to is still in production. However, we expect it to be either UNet3+ or DeepLabV3.
 
 ## Installation
- > TODO PR2
+
+The code requires `python>=3.11.3`, as well as `pytorch>=2.3` and `torchvision>=0.18`. Please follow the instructions [here](https://pytorch.org/get-started/locally/) to install both PyTorch and TorchVision dependencies.
+
+1. Clone the this repository locally and install with
+
+`git clone https://github.com/cs175cv-s2024/final-project-brown-rice.git`
+
+2. Install the required packages and dependencies:
+   `pip install -r requirements.txt`
 
 ## Getting Started
 
@@ -39,8 +47,7 @@ To deactivate the virtual environment, type `deactivate`.
 Install the required packages:
     `pip install -r requirements.txt`
 ### Step 2: 
-PUT INFO FOR LOGGING INTO WANDB
-Can use Wandb for experiment tracking, visualization, and collaboration in this project. Follow this page for [logging in](https://wandb.auth0.com/login?state=hKFo2SB4VS1WN2dXa0k4OHhTYndvelBiOGRMckRUWl9feGJ5VaFupWxvZ2luo3RpZNkgYTVDY0lUcXBPSVJsUVNSOXhWOTFMenpsRnZTcFBWUEajY2lk2SBWU001N1VDd1Q5d2JHU3hLdEVER1FISUtBQkhwcHpJdw&client=VSM57UCwT9wbGSxKtEDGQHIKABHppzIw&protocol=oauth2&nonce=TmpIZ2NwflJqWVFCT0VvMA%3D%3D&redirect_uri=https%3A%2F%2Fapi.wandb.ai%2Foidc%2Fcallback&response_mode=form_post&response_type=id_token&scope=openid%20profile%20email).
+Use Wandb for experiment tracking, visualization, and collaboration in this project. Follow this page for [logging in](https://wandb.auth0.com/login?state=hKFo2SB4VS1WN2dXa0k4OHhTYndvelBiOGRMckRUWl9feGJ5VaFupWxvZ2luo3RpZNkgYTVDY0lUcXBPSVJsUVNSOXhWOTFMenpsRnZTcFBWUEajY2lk2SBWU001N1VDd1Q5d2JHU3hLdEVER1FISUtBQkhwcHpJdw&client=VSM57UCwT9wbGSxKtEDGQHIKABHppzIw&protocol=oauth2&nonce=TmpIZ2NwflJqWVFCT0VvMA%3D%3D&redirect_uri=https%3A%2F%2Fapi.wandb.ai%2Foidc%2Fcallback&response_mode=form_post&response_type=id_token&scope=openid%20profile%20email) or look at [Quickstart guide](https://docs.wandb.ai/quickstart).
 1. run `wandb login`
 2. Input W&B API key into the prompt. If you don't have an account, you'll need to sign up first on their website. Once you've logged in and authenticated your account, you can start using 
 3. Input your project name associated with your account in train.py with the line wandb.init(project="PROJECT_NAME"), replacing PROJECT_NAME with the name of your project.
@@ -81,8 +88,8 @@ Note: The F1 score was set to be logged later on in the sweeps that were ran, so
 
 
 ### [selected model: TBD]
-> We can include & compare to as many models as need be. 
-> Here we would do the same as we did above for UNet, but for the model we choose to select for training and comparision (which is tbd in PR3) 
+> We can include & compare to as many models as need be.
+> Here we would do the same as we did above for UNet, but for the model we choose to select for training and comparision (which is tbd in PR3)
 
 | Epochs | F1 Score | Training Accuracy | Training Loss | Validation Accuracy | Validation Loss |
 | ------ | -------- | ----------------- | ------------- | ------------------- | --------------- |
@@ -90,8 +97,81 @@ Note: The F1 score was set to be logged later on in the sweeps that were ran, so
 | 20 | 0.0 | 0.0 | 0 | 0.0 | 0 |
 | 30 | 0.0 | 0.0 | 0 | 0.0 | 0 |
 
-## Data Set
-> TODO PR2: Explain the data set with sample images. Explain the satellites
+## Dataset
+
+The datasets used in this project are derived from the IEEE GRSS 2021 Data Fusion Contest. The dataset comprises satellite imagery data from multiple satellites, each with unique characteristics and data types. For more information, visit the [IEEE GRSS Data Fusion Contest page](https://www.grss-ieee.org/community/technical-committees/2021-ieee-grss-data-fusion-contest-track-dse/). You can download the dataset [here](https://drive.google.com/file/d/1mVDV9NkmyfZbkSiD5lkskv_MwOuYxiog/view)
+
+The dataset includes:
+
+### Sentinel-1 Polarimetric SAR Dataset
+
+- Channels: 2 (VV and VH polarization)
+- Spatial Resolution: 10m (resampled from 5x20m)
+- File Name Prefix: S1A*IW_GRDH*.tif
+- Size: 2.1 GB (float32)
+- Number of Images: 4
+- Acquisition Mode: Interferometric Wide Swath
+- More Info: [User Guide](https://sentiwiki.copernicus.eu/web/s1-applications)
+
+<!-- ![Sentinel-1](assets/Sentinel-1.png) -->
+<img src="assets/Sentinel-1.png" alt="Sentinel-1" width="300">
+
+
+### Sentinel-2 Multispectral Dataset
+
+- Channels: 12 (VNIR and SWIR ranges)
+- Spatial Resolution: 10m, 20m, and 60m
+- File Name Prefix: L2A\_\*.tif
+- Size: 6.2 GB (uint16)
+- Number of Images: 4
+- Level of Processing: 2A
+- More Info: [Technical Guide](https://sentiwiki.copernicus.eu/web/s2-processing), [User Guide](https://sentiwiki.copernicus.eu/web/s2-applications)
+
+<img src="assets/Sentinel-2.png" alt="Sentinel-2" width="300">
+
+
+### Landsat 8 Multispectral Dataset
+
+- Channels: 11 (VNIR, SWIR, TIR, and Panchromatic)
+- Spatial Resolution: 15m, 30m, and 100m
+- File Name Prefix: LC08*L1TP*.tif
+- Size: 8.5 GB (float32)
+- Number of Images: 3
+- Sensors Used: OLI and TIRS
+- More Info: [Landsat 8 Overview](https://landsat.gsfc.nasa.gov/satellites/landsat-8/), [User Handbook](https://www.usgs.gov/landsat-missions/landsat-8-data-users-handbook)
+
+<!-- ![Landsat-8](assets/plot_landsat.png) -->
+<img src="assets/plot_landsat.png" alt="Landsat-8" width="600">
+
+
+### Suomi NPP VIIRS Nighttime Dataset
+
+- Channels: 1 (Day-Night Band - DNB)
+- Spatial Resolution: 500m (resampled from 750m)
+- File Name Prefix: DNB*VNP46A1*.tif
+- Size: 1.2 GB (uint16)
+- Number of Images: 9
+- Product Name: VNP46A1
+- More Info: [User Guide](https://viirsland.gsfc.nasa.gov/PDF/VIIRS_BlackMarble_UserGuide.pdf)
+
+<!-- ![VIIRS](assets/VIIRS.png) -->
+<img src="assets/VIIRS.png" alt="VIIRS" width="300">
+
+
+### Semantic Labels
+
+The training data is split across 60 folders named TileX, where X is the tile number. Each folder includes 100 files, with 98 corresponding to the satellite images listed above. Reference information ("groundTruth.tif" file) for each tile includes labels for human settlement and electricity presence. The labeling is as follows:
+
+1. Human settlements without electricity: Color ff0000
+2. No human settlements without electricity: Color 0000ff
+3. Human settlements with electricity: Color ffff00
+4. No human settlements with electricity: Color b266ff
+
+An additional reference file (groundTruthRGB.png) is provided at 10m resolution in RGB for easier visualization in each tile, as shown below.
+
+<!-- ![groundTruthRGB](data/raw/Train/Tile1/groundTruthRGB.png) -->
+<img src="assets/groundTruthRGB.png" alt="groundTruthRGB" width="300">
+
 
 ## Training
 We will train the models using the model architectures defined above in conjunction with the PyTorch Lightning Module for ease of running the training step in `train.py`. Model training will be monitored using Weights and Biases (as signed up for in the Setup section).
@@ -112,12 +192,24 @@ For example, if you would like to run training for the architecture UNet for sev
 - These sweeps will be logged in your wandb account
 
 ## Liscense
-> TODO PR2:
 
-## Contributers
-> TODO PR2
+This project is licensed under the [MIT License](LICENSE)
+
+## Contributers / Authors
+
+[Levi Ramirez](https://github.com/Levi-Ramirez),
+[Shadi Bitaraf](https://github.com/ShadiBitaraf),
+[Vedaant Patel](https://github.com/Vedaantp),
+[Benjamin Wong](https://github.com/chiyeon)
 
 ## References
-> Todo PR2:
-- **[ link to model ]**
-- **Acknowledgement of CS175 Staff's HW3 Base Code**
+
+[Overview of Semantic Segmentation](https://www.jeremyjordan.me/semantic-segmentation/)
+
+[Cook Your First UNET in Pytorch](https://towardsdatascience.com/cook-your-first-u-net-in-pytorch-b3297a844cf3)
+
+[HW03: Semantic Segmentation and Model Monitoring](https://github.com/cs175cv-s2024/hw3-semantic-segmentation-brown-rice)
+
+[Wandb Quickstart](https://docs.wandb.ai/quickstart)
+
+[PR3: add more sources pertaining to your new ML model + l1 regularization]
