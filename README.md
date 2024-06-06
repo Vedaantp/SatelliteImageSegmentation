@@ -75,8 +75,6 @@ The UNet model performed well and achieved an accuracy high of 67% on the valida
 ![UNet-Training-Accuracy](assets/UNet-Train-Acc.png)
 ![UNet-Training-Loss](assets/UNet-Train-Loss.png)
 
-
-
 Note: The F1 score was set to be logged later on in the sweeps that were ran, so some of the runs do not include an F1 score.
 
 | Epochs | F1 Score | Training Accuracy | Training Loss | Validation Accuracy | Validation Loss | Embedding Size | In Channels | Learning Rate | N Encoders |
@@ -86,7 +84,7 @@ Note: The F1 score was set to be logged later on in the sweeps that were ran, so
 | 10 | NA | 0.67 | 0.77 | 0.63 | 0.88 | 32 | 56 | 0.0529 | 5 |
 | 10 | NA | 0.68 | 0.75 | 0.64 | 0.88 | 256 | 56 | 0.08564 | 5 |
 | 25 | 0.58 | 0.66 | 0.79 | 0.62 | 0.91 | 64 | 66 | 0.08762 | 4 |
-| 25 | 0.66 | 0.74 | 0.59 | 0.67 | 0.76 | 256 | 99 | 0.0005 | 5 |
+| 25 | 0.66 | 0.72 | 0.61 | 0.69 | 0.83 | 256 | 99 | 0.0005 | 5 |
 
 
 ### [selected model: TBD]
