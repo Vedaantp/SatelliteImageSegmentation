@@ -28,13 +28,18 @@ Developed by Brown Rice: [Levi Ramirez](https://github.com/Levi-Ramirez), [Shadi
 | 30 | 0.0 | 0.0 | 0 | 0.0 | 0 |
 
 ### UNet
-> We can include & compare to as many models as need be. 
+UNet is a network where the input is downscaled down to a lower resolution with a higher amount of channels, but the residual images between encoders are saved to be concatednated to later stages, creatin the nominal "U" shape. The highest validation accuracy that was achieved is 67% and the highest F1 score achieved is 0.66.
+
+Note: The F1 score was set to be logged later on in the sweeps that were ran, so some of the runs do not include an F1 score.
 
 | Epochs | F1 Score | Training Accuracy | Training Loss | Validation Accuracy | Validation Loss |
 | ------ | -------- | ----------------- | ------------- | ------------------- | --------------- |
-| 10 | 0.0 | 0.0 | 0 | 0.0 | 0 |
-| 20 | 0.0 | 0.0 | 0 | 0.0 | 0 |
-| 30 | 0.0 | 0.0 | 0 | 0.0 | 0 |
+| 5 | NA | 0.59 | 0.84 | 0.56 | 0.90 |
+| 5 | NA | 0.65 | 0.8 | 0.61 | 0.98 |
+| 10 | NA | 0.67 | 0.77 | 0.62 | 0.88 |
+| 10 | NA | 0.68 | 0.75 | 0.64 | 0.88 |
+| 25 | 0.58 | 0.66 | 0.79 | 0.62 | 0.91 |
+| 25 | 0.66 | 0.74 | 0.59 | 0.67 | 0.76 |
 
 ## References
 - **[ link to model ]**
