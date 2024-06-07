@@ -65,14 +65,17 @@ This model uses what is called a "skip connection", these are inspired by the no
 
 ## Performance
 ### UNet
-The UNet model performed well and achieved an accuracy high of 67% on the validation set. For the runs 1-4, Sentinel 1 and Sentinel 2 bands were used. For run 5, Sentinel 1, Sentinel 2, VIIRS, and VIIRS MAX Projection were used. For run 6, all bands were used.
+The UNet model performed well and achieved an accuracy high of 67% on the validation set. For run 1 through 4 in the table, Sentinel 1 and Sentinel 2 bands were used. For run 5, Sentinel 1, Sentinel 2, VIIRS, and VIIRS MAX Projection were used. For run 6, all bands were used.
 
-![UNet-Prediction-1](assets/UNet-Pred1.png) ![UNet-Prediction-2](assets/UNet-Pred2.png)
+![UNet-Prediction-1](assets/UNet-Pred1.png) 
+![UNet-Prediction-2](assets/UNet-Pred2.png)
 ![UNet-F1-Score](assets/UNet-F1-Score.png)
-![UNet-Val-Accuracy](assets/UNet-Val-Accuracy.png) ![UNet-Val-Loss](assets/UNet-Val-Loss.png)
-![UNet-Training-Accuracy](assets/UNet-Train-Accuracy.png) ![UNet-Training-Loss](assets/UNet-Train-Loss.png)
+![UNet-Val-Accuracy](assets/UNet-Val-Accuracy.png) 
+![UNet-Val-Loss](assets/UNet-Val-Loss.png)
+![UNet-Training-Accuracy](assets/UNet-Train-Accuracy.png) 
+![UNet-Training-Loss](assets/UNet-Train-Loss.png)
 
-Note: The F1 score was set to be logged later on in the sweeps that were ran, so some of the runs do not include an F1 score.
+**Note:** The F1 score was set to be logged later on in the sweeps that were ran, so some of the runs do not include an F1 score.
 
 | Epochs | F1 Score | Training Accuracy | Training Loss | Validation Accuracy | Validation Loss | Embedding Size | In Channels | Learning Rate | N Encoders |
 | ------ | -------- | ----------------- | ------------- | ------------------- | --------------- | -------------- | ----------- | ------------- | ---------- |
