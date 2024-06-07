@@ -20,7 +20,7 @@ NOTE: anything that is in '[ ]' is in progress and will be delivered in the fina
 
 The code requires `python>=3.11.3`, as well as `pytorch>=2.3` and `torchvision>=0.18`. Please follow the instructions [here](https://realpython.com/installing-python/) to install both python if you don't have it installed already. All other dependencies (including pytorch) will be installed using the following steps:
 
-1. Clone the this repository locally and install with
+1. Clone this repository locally and install with
 
 `git clone https://github.com/cs175cv-s2024/final-project-brown-rice.git`
 
@@ -40,8 +40,8 @@ To deactivate a virtual environment, type `deactivate` in the command line.
 ## Getting Started
 
 ### Step 1: 
-Use Wandb for experiment tracking, visualization, and collaboration in this project. Setup your account using [Quickstart guide](https://docs.wandb.ai/quickstart).
-1. run `wandb login`
+Use Wandb for experiment tracking, visualization, and collaboration in this project. Setup your account using the [Quickstart guide](https://docs.wandb.ai/quickstart).
+1. Run `wandb login` in the command line
 2. Input W&B API key into the prompt. If you don't have an account, you'll need to sign up first on their website. Once you've logged in and authenticated your account, you can start using Wandb to track the weights and biases of your ML runs.
 3. Input your project name associated with your account in train.py in the line with the function wandb.init(project="PROJECT_NAME"), replacing PROJECT_NAME with the name of your project.
 
@@ -170,11 +170,11 @@ An additional reference file (groundTruthRGB.png) is provided at 10m resolution 
 
 
 ## Training
-We will train the models using the model architectures defined in the [Models](#models) section in conjunction with the PyTorch Lightning Module for ease of running the training step in `train.py`. Model training will be monitored using Weights & Biases (as signed up for in the [Getting Started](#getting-started) section).
+We will train the models using the model architectures defined in the [Models](#models) section in conjunction with the PyTorch Lightning Module for ease of implementation of the training process. Model training will be monitored using Weights & Biases (as signed up for in the [Getting Started](#getting-started) section).
 
 ### `ESDConfig` Python Dataclass
-In `src/utilities.py` we have created an `ESDConfig` dataclass to store all the paths and parameters for experimenting with the training step. These default parameters can be overwritten with added options when executing the `scripts.train` in the command line.
-- To get a list of the options: `python -m scripts.train -help`
+In `src/utilities.py` we have created an `ESDConfig` dataclass to store all the paths and parameters for experimenting with the training step. These default parameters can be overwritten with added options when executing `scripts.train` in the command line.
+- To get a list of the options, run this command: `python -m scripts.train -help`
 
 For example, if you would like to run training for the architecture UNet for seven epochs you would run:
 
