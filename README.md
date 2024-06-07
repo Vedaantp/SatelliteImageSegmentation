@@ -181,9 +181,9 @@ For example, if you would like to run training for the architecture UNet for sev
 `python -m scripts.train --model_type=unet --max_epochs=7`
 
 ### Hyperparameter Sweeps
-- `sweeps.yml` in order to automate hyperparameter search over metrics such as batch size, epochs, learning rate, and optimizer.
+- `sweeps.yml` is used to automate hyperparameter search over metrics such as batch size, epochs, learning rate, and optimizer.
 
-- To run training with the hyperparameter sweeps you define in `sweeps.yml`, run `train_sweeps.py --sweep_file=sweeps.yml` provided for you.
+- To run training with the hyperparameter sweeps you define in `sweeps.yml`, run `python scripts/train_sweeps.py --sweep_file scripts/sweeps.yml`
 
 - These sweeps will be logged in your wandb account
 
