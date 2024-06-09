@@ -222,6 +222,8 @@ This project is licensed under the [MIT License](LICENSE)
 
 [PR3: add more sources pertaining to your new ML model + l1 regularization]
 
+*UNet 3+: A full-scale connected unet for medical image segmentation* ([repo](https://github.com/ZJUGiveLab/UNet-Version)) ([article](https://arxiv.org/abs/2004.08790))
+
 ## Citing this project
 
 If you use **Society and Electricity Satellite Segmentation: A comparison of UNet with [a select model: TBD]** in your research, please use the following BibTeX entry:
