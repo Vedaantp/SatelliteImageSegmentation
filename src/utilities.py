@@ -18,12 +18,14 @@ class SatelliteType(Enum):
 
 ROOT = Path.cwd()
 PROJ_NAME = "CS175-spring-2024"
-MODEL = "UNet"
+MODEL = "deep_lab"  # default, valid values are ["UNet", "SegmentationCNN", "FCNResnetTransfer"] # fmt: skip
+
 
 @dataclass
 class ESDConfig:
     processed_dir: Path = ROOT / "data" / "processed"
     raw_dir: Path = ROOT / "data" / "raw" / "Train"
+    checkpoint_file: str = ""
     results_dir: Path = ROOT / "data" / "predictions" / MODEL
     selected_bands = {
         SatelliteType.VIIRS: ["0"],
@@ -31,45 +33,45 @@ class ESDConfig:
         SatelliteType.S2: [
             "12",
             "11",
-            "09",
-            "8A",
+            # "09",
+            # "8A",
             "08",
-            "07",
-            "06",
-            "05",
+            # "07",
+            # "06",
+            # "05",
             "04",
             "03",
             "02",
-            "01",
+            # "01",
         ],
         SatelliteType.LANDSAT: [
             "11",
             "10",
-            "9",
-            "8",
+            # "9",
+            # "8",
             "7",
             "6",
             "5",
             "4",
             "3",
             "2",
-            "1",
+            # "1",
         ],
         SatelliteType.VIIRS_MAX_PROJ: ["0"],
     }
 
-    accelerator: str = "cpu"
-    batch_size: int = 2
+    accelerator: str = "mps"
+    batch_size: int = 4
     depth: int = 2
     devices: int = 1
-    embedding_size: int = 64
+    embedding_size: int = 256
     in_channels: int = 99  # num_dates * num_bands
     kernel_size: int = 3
-    learning_rate: float = 1e-3
+    learning_rate: float = 0.0001
     max_epochs: int = 1
     model_path: Path = ROOT / "models" / MODEL / "last.ckpt"
     model_type: str = MODEL
-    n_encoders: int = 2
+    n_encoders: int = 3
     num_workers: int = 6
     out_channels: int = 4  # 4 out channels for our 4 classes
     pool_sizes: str = "5,5,2"

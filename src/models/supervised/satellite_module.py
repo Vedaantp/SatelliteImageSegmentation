@@ -5,6 +5,7 @@ from torch import nn
 import torchmetrics
 
 from src.models.supervised.unet import UNet
+from src.models.supervised.deepLabV3 import DeepLabV3Module
 from src.models.supervised.unet_3plus import UNet_3Plus
 from src.models.supervised.resnet_transfer import FCNResnetTransfer
 from src.models.supervised.segmentation_cnn import SegmentationCNN
@@ -37,6 +38,8 @@ class ESDSegmentation(pl.LightningModule):
             self.model = SegmentationCNN(in_channels=in_channels, out_channels=out_channels, **model_params)
         elif model_type.lower() == "fcn_resnet_transfer":
             self.model = FCNResnetTransfer(in_channels=in_channels, out_channels=out_channels, **model_params)
+        elif model_type == "deep_lab":
+            self.model = DeepLabV3Module(in_channels=in_channels, out_channels=out_channels, **model_params)
         else:
             raise ValueError(f"Unsupported model type: {model_type}")
         
@@ -57,6 +60,11 @@ class ESDSegmentation(pl.LightningModule):
         predictions = self(sat_img)
         # calculate cross entropy loss
         loss = nn.CrossEntropyLoss()(predictions, mask.long())
+
+        #apply l1 regularization
+        l1_lambda = 0.001
+        l1_norm = sum(p.abs().sum() for p in self.parameters())
+        loss = loss + l1_lambda * l1_norm
         
         # calculate training accuracy
         preds = torch.argmax(predictions, dim=1)
