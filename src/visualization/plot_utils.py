@@ -28,8 +28,24 @@ def flatten_dataset(data_set: xr.DataArray) -> np.ndarray:
     np.ndarray
         the new 1D array of shape (tile * time * band * height * width)
     """
-    raise NotImplementedError
+    '''
+    Tile0: date, band...
+    Tile1: date, band...
+    Tile2: date, band...
+    ...
+    '''
 
+    tiles = []
+    for tile_name, tile_data in data_set.data_vars.items():
+        # 'tile_name': name of the data variable (ex: 'Tile0', 'Tile1', ...)
+        # 'tile_data': actual data variable (DataArray)
+        tiles.append(tile_data)
+
+    combined_data = xr.concat(tiles, dim='date')
+    # flat_array = combined_data.stack(z=("date","band","height","width"))
+    flat_array = combined_data.stack(z=combined_data.dims)
+
+    return flat_array.values
 
 def flatten_dataset_by_band(data_set: xr.DataArray) -> np.ndarray:
     """
@@ -46,7 +62,12 @@ def flatten_dataset_by_band(data_set: xr.DataArray) -> np.ndarray:
     np.ndarray
         the new array of shape (band, tile * time * height * width)
     """
-    raise NotImplementedError
+    retArr = []
+    for band in data_set.band.values: #loops through the band values
+        newXr = data_set.sel(band=band) # gives a new x array of all "coords concatinated with that band value
+        retArr.append(flatten_dataset(newXr)) # flattens this new x array into an np array
+    retArr = np.array(retArr)
+    return retArr
 
 
 def plot_viirs_histogram(
@@ -80,14 +101,14 @@ def plot_viirs_histogram(
     # --- start here ---
 
     # set scale to log
-    
+    ax[0, 0].set_yscale('log')
     # plot histogram
-    
+    ax[0, 0].hist(viirs_flattened, bins=n_bins)
     # tick params on both axis with size of 20
-    
+    ax[0, 0].tick_params(axis='both', which='major', labelsize=20)
     # set title w/ font size of 12 to: "Viirs Histogram (log scaled), {num_tiles} tiles, {num_dates} dates"
+    ax[0, 0].set_title(f"Viirs Histogram (log scaled), {num_tiles} tiles, {num_dates} dates", fontsize=12)
     
-
     # --- end ---
 
     if image_dir is None:
@@ -99,8 +120,8 @@ def plot_viirs_histogram(
     else:
         fig.savefig(image_dir, format="jpeg")
         plt.close()
-    
-    raise NotImplementedError
+
+    return
 
 
 def plot_sentinel1_histogram(
@@ -140,15 +161,15 @@ def plot_sentinel1_histogram(
     # --- start here ---
 
     # iterate by band
-   
+    for band, band_list in enumerate(flattened_dataset_list):
         # set scale to log
-        
+        ax[band, 0].set_yscale('log')
         # plot histogram
-       
+        ax[band, 0].hist(band_list, bins=n_bins)
         # tick params on both axis with size of 15
-        
+        ax[band, 0].tick_params(axis='both', which='major', labelsize=15)
         # set title w/ font size 9 to: "Sentinel 1 Histogram (log scaled)\n{num_tiles} tiles, {num_dates} dates\nBand {satellite_bands[band]}"
-        
+        ax[band, 0].set_title(f"Sentinel 1 Histogram (log scaled)\n{num_tiles} tiles, {num_dates} dates\nBand {satellite_bands[band]}", fontsize=12)
 
     # --- end ---
 
@@ -162,7 +183,7 @@ def plot_sentinel1_histogram(
         fig.savefig(image_dir, format="jpeg")
         plt.close()
 
-    raise NotImplementedError
+    return
 
 
 def plot_sentinel2_histogram(
@@ -202,15 +223,15 @@ def plot_sentinel2_histogram(
     # --- start here ---
 
     # iterate by band
-   
+    for band, band_list in enumerate(flattened_dataset_list):
         # set scale to log
-        
+        ax[band // 3, band % 3].set_yscale('log')
         # plot histogram
-        
+        ax[band // 3, band % 3].hist(band_list, n_bins)
         # tick params on both axis with size of 7
-        
+        ax[band // 3, band % 3].tick_params(axis='both', which='major', labelsize=7)
         # set title w/ font size 9 to: "Sentinel 2 Histogram (log scaled)\n{num_tiles} tiles, {num_dates} dates\nBand {satellite_bands[band]}"
-        
+        ax[band // 3, band % 3].set_title(f"Sentinel 2 Histogram (log scaled)\n{num_tiles} tiles, {num_dates} dates\nBand {satellite_bands[band]}", fontsize=9)
 
     # --- end ---
 
@@ -224,7 +245,7 @@ def plot_sentinel2_histogram(
         fig.savefig(image_dir, format="jpeg")
         plt.close()
 
-    raise NotImplementedError
+    return
 
 
 def plot_landsat_histogram(
@@ -264,14 +285,15 @@ def plot_landsat_histogram(
     # --- start here ---
 
     # iterate by band
-   
+    for band, band_list in enumerate(flattened_dataset_list):
         # set scale to log
-        
+        ax[band, 0].set_yscale('log')
         # plot histogram
-        
+        ax[band, 0].hist(band_list, bins=n_bins)
         # tick params on both axis with size of 9
-        
+        ax[band, 0].tick_params(axis='both', which='major', labelsize=9)
         # set title w/ font size 9 to: "Landsat 8 Histogram (log scaled)\n{num_tiles} tiles, {num_dates} dates\nBand {satellite_bands[band]}"
+        ax[band, 0].set_title(f"Landsat 8 Histogram (log scaled)\n{num_tiles} tiles, {num_dates} dates\nBand {satellite_bands[band]}", fontsize=9)
 
     # --- end ---
 
@@ -285,7 +307,7 @@ def plot_landsat_histogram(
         fig.savefig(image_dir, format="jpeg")
         plt.close()
 
-    raise NotImplementedError
+    return
 
 def plot_gt_histogram(
     data_set: xr.Dataset, image_dir: Path = None, n_bins: int = 4
@@ -313,13 +335,14 @@ def plot_gt_histogram(
     # --- start here ---
 
     # set scale to log
-    
+    ax[0, 0].set_yscale('log')
     # plot histogram
+    ax[0, 0].hist(gt_flattened, bins=n_bins)
    
     # tick params on both axis with size of 9
-    
+    ax[0, 0].tick_params(axis='both', which='major', labelsize=9)
     # set title w/ font size 9 to: "GT Histogram (log scaled), {num_tiles} tiles"
-    
+    ax[0, 0].set_title(f"GT Histogram (log scaled), {num_tiles} tiles", fontsize=9)
 
     # --- end ---
 
@@ -334,7 +357,7 @@ def plot_gt_histogram(
         fig.savefig(image_dir, format="jpeg")
         plt.close()
 
-    raise NotImplementedError
+    return
 
 def plot_gt(data_array: xr.DataArray, image_dir: Path = None) -> None:
     """
@@ -358,10 +381,12 @@ def plot_gt(data_array: xr.DataArray, image_dir: Path = None) -> None:
     # --- start here ---
 
     # imshow the ground truth image
-    
+    # flatten = flatten_dataset(data_array)
+    ax[0, 0].imshow(data_array[0][0])
+
     # set title to: "Ground Truth\n{data_array.attrs['parent_tile_id']}"
-    
     # set the font size to 9
+    ax[0, 0].set_title(f"Ground Truth\n{data_array.attrs['parent_tile_id']}", fontsize=9)
     
 
     # --- end ---
@@ -375,7 +400,7 @@ def plot_gt(data_array: xr.DataArray, image_dir: Path = None) -> None:
         fig.savefig(image_dir, format="jpeg")
         plt.close()
     
-    raise NotImplementedError
+    return
 
 def plot_max_projection_viirs(data_array: xr.DataArray, image_dir: Path = None) -> None:
     """
@@ -399,12 +424,11 @@ def plot_max_projection_viirs(data_array: xr.DataArray, image_dir: Path = None) 
     # --- start here ---
 
     # show the image
+    ax[0, 0].imshow(data_array[0][0])
     
     # set the title to: "Max Projection VIIRS\n{data_array.attrs['parent_tile_id']}"
-   
     # set the font size to 9
-   
-
+    ax[0, 0].set_title(f"Max Projection VIIRS\n{data_array.attrs['parent_tile_id']}", fontsize=9)
     # --- end ---
 
     if image_dir is None:
@@ -416,7 +440,7 @@ def plot_max_projection_viirs(data_array: xr.DataArray, image_dir: Path = None) 
         fig.savefig(image_dir, format="jpeg")
         plt.close()
     
-    raise NotImplementedError
+    return
 
 def plot_viirs(data_array: xr.DataArray, image_dir: Path = None) -> None:
     """
@@ -448,25 +472,26 @@ def plot_viirs(data_array: xr.DataArray, image_dir: Path = None) -> None:
     # --- start here ---
 
     # set the date index and band to 0, 0
-    
+    dateInd = 0
+    bandInd = 0
     # iterate by rows
-    
+    for row in range(num_rows):
         # iterate by columns
-       
+        for col in range(num_cols):
             # if the date index is less that the num_dates
-           
+            if dateInd < num_dates:
                 # show the image
-               
+                ax[row, col].imshow(data_array[dateInd, bandInd])
                 # set title w/ font size 9 to: "VIIRS Image\n{data_array['date'][viirs_date_index].values}"
-               
+                ax[row, col].set_title(f"VIIRS Image\n{data_array['date'][dateInd].values}", fontsize=9)
                 # set the axis to off
-                
+                ax[row, col].axis('off')
             # else
-            
+            else:
                 # set visibility to false
-               
+                ax[row, col].set_visible(False)
             # increment the date index
-           
+            dateInd += 1
 
     # --- end ---
 
@@ -479,7 +504,7 @@ def plot_viirs(data_array: xr.DataArray, image_dir: Path = None) -> None:
         fig.savefig(image_dir, format="jpeg")
         plt.close()
     
-    raise NotImplementedError
+    return
 
 def create_rgb_composite_s1(data_array: xr.DataArray, image_dir: Path = None) -> None:
     """
@@ -515,29 +540,31 @@ def create_rgb_composite_s1(data_array: xr.DataArray, image_dir: Path = None) ->
     # --- start here ---
 
     # set the date index to 0
-    
+    dateInd = 0
     # iterate by rows
-   
+    for row in range(num_rows):
         # iterate by columns
-        
+        for col in range(num_cols):
             # if the date is less than num_dates
-           
+            '''         ^^ the "date index"?        '''
+            if dateInd < num_dates:
                 # get Red by getting the VH image (.sel(band))
-                
+                red = data_array[dateInd].sel(band='VH')
                 # get Green by getting the VV image (.sel(band))
-                
+                green = data_array[dateInd].sel(band='VV')
                 # get Blue by doing (Red - Green) and clipping between 0 and 1
-                
+                blue = np.clip(red - green, 0, 1)
                 # stack and show the image
-                
+                rgb_image = np.stack((red, green, blue), axis=2)
+                ax[row,col].imshow(rgb_image)
                 # set title w/ font size 9 to: "Sentinel 1 RGB composite\n{data_array[date]['date'].values}"
-               
+                ax[row, col].set_title(f"Sentinel 1 RGB composite\n{data_array[dateInd]['date'].values}", fontsize=9)
                 # set the axis to off
                 
             # else
-            
+            else:
                 # set visibility to false
-               
+                ax[row, col].set_visible(False)
             # increment the date index
            
     # --- end ---
@@ -552,7 +579,7 @@ def create_rgb_composite_s1(data_array: xr.DataArray, image_dir: Path = None) ->
         fig.savefig(image_dir, format="jpeg")
         plt.close()
     
-    raise NotImplementedError
+    return
 
 
 def plot_satellite_by_bands(
@@ -588,28 +615,29 @@ def plot_satellite_by_bands(
     # --- start here ---
 
     # iterate through enumeration (index, bands) over the bands to plot
-    
+    for band_ind, bands in enumerate(bands_to_plot):
         # iterate by date
-        
+        for date_ind, date in enumerate(data_array.date):
             # initalize a list to store the data
-           
+            arr = []
             # iterate over the bands
-           
+            for band in bands:
                 # append the (date, band) image to the data list
-                
+                arr.append(data_array.sel(date=date, band=band).values)
             # stack and transpose the data list, then imshow
-            
+            # imgStack = np.stack(arr, axis=2)
+            ax[date_ind, band_ind].imshow(np.stack(arr).transpose(2,1,0), cmap='gray')
             # set the axis to off
-            
+            ax[date_ind, band_ind].axis('off')
 
             # set bands for title (empty string)
-          
+            bands_for_title = ''
             # iterate over the bands
-            
+            for band in bands:
                 # add the string to the bands for title string: band + " "
-                
+                bands_for_title += band + ' '
             # set title w/ font size 9 to: "{str(data_array.attrs['satellite_type']).capitalize()} {bands_for_title}\n{(data_array['date'])[date].values}"
-            
+            ax[date_ind, band_ind].set_title(f"{str(data_array.attrs['satellite_type']).capitalize()} {bands_for_title}\n{(data_array['date'])[date_ind].values}", fontsize=9)
     # --- end ---
 
     if image_dir is None:
@@ -624,4 +652,4 @@ def plot_satellite_by_bands(
         fig.savefig(image_dir, format="jpeg")
         plt.close()
     
-    raise NotImplementedError
+    return
