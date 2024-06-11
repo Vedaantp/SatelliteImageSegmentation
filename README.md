@@ -196,8 +196,9 @@ For example, if you would like to run training for the architecture UNet for sev
 
       MODEL = 'MODEL_NAME'
 
-## [Pipeline]
-> [TODO PR3: impelment pipeline diagram once architecture is finalized]
+## Pipeline
+Full machine learning pipeline + evaluate.py pipeline
+<img src="assets/mlPipelineV3.png" alt="machine learning pipeline">
 
 ## Liscense
 
