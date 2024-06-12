@@ -249,9 +249,6 @@ This project is licensed under the [MIT License](LICENSE)
 
 [Wandb Quickstart](https://docs.wandb.ai/quickstart)
 
-
-*UNet 3+: A full-scale connected unet for medical image segmentation* ([repo](https://github.com/ZJUGiveLab/UNet-Version)) ([article](https://arxiv.org/abs/2004.08790))
-
 [DeepLabV3 Ultimate Guide](https://learnopencv.com/deeplabv3-ultimate-guide/) - Resource for learning & graphics
 
 ## Citing this project
