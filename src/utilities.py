@@ -60,7 +60,7 @@ class ESDConfig:
         SatelliteType.VIIRS_MAX_PROJ: ["0"],
     }
 
-    accelerator: str = "mps"
+    accelerator: str = "cpu"
     batch_size: int = 4
     depth: int = 2
     devices: int = 1
