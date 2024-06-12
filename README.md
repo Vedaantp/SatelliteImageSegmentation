@@ -14,6 +14,12 @@ Developed by Brown Rice: [Levi Ramirez](https://github.com/Levi-Ramirez), [Shadi
 ## Goal
 **Society and Electricity Satellite Segmentation** targets semantic segmentation, seeking to adapt & use multiple models to achieve high classification accuracy  on the IEEE GRSS 2021 Data Fusion Contest dataset. We will compare the performance of DeepLabV3 with ResNet-101 against a base UNet model.
 
+## Links
+- [Presentation Video](https://drive.google.com/file/d/1YdW6rR6Sz3B7gmHiJ_T-qmvrKQmNhJTZ/view?usp=drive_link) (4:58) 
+- [Presentation Slides](https://docs.google.com/presentation/d/1m1j8AbW45G5winhdcOWOZE1Pqv9NMdlVqWHvgyn3Nds/edit?usp=drive_link)
+- [Technical Memorandum](https://docs.google.com/document/d/1BZ-9eep69z8YbXZpjtSkoP2Gme51i3fY3ekawlDdacY/edit?usp=sharing)
+- [Project Poster](https://docs.google.com/presentation/d/1s1OpdS_f0XRhgllhzwgc2pmB7fn-TECbbmF9jXd8tl0/edit?usp=drive_link)
+
 ## Project Overview/Architecture
 **Society and Electricity Satellite Segmentation** is powered by PyTorch & PyTorch Lightning, with a "from-scratch" UNet implementation and PyTorch's DeepLabV3 models.
 
