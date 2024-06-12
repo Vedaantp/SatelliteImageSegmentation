@@ -24,6 +24,7 @@ Developed by Brown Rice: [Levi Ramirez](https://github.com/Levi-Ramirez), [Shadi
 **Society and Electricity Satellite Segmentation** is powered by PyTorch & PyTorch Lightning, with a "from-scratch" UNet implementation and PyTorch's DeepLabV3 models.
 
 ### Directory
+**NOTE: Some directories/files are followed by another name in quotations to assist in project assignment name varification.**
 - `assets/`: 'data_folder' - Visual graphics for documentation purpose
 - `data/`: Initially empty, contains `raw/` dataset folder. More details are included in [Getting Started](#getting-started) below
 - `models/`: 'model folder' - contains checkpoints after each model run. Also contains a text file linking to author's best models.
