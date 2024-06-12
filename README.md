@@ -243,11 +243,12 @@ This project is licensed under the [MIT License](LICENSE)
 
 [Cook Your First UNET in Pytorch](https://towardsdatascience.com/cook-your-first-u-net-in-pytorch-b3297a844cf3)
 
+[Pytorch DeepLabV3](https://pytorch.org/vision/main/models/deeplabv3.html)
+
 [HW03: Semantic Segmentation and Model Monitoring](https://github.com/cs175cv-s2024/hw3-semantic-segmentation-brown-rice)
 
 [Wandb Quickstart](https://docs.wandb.ai/quickstart)
 
-[PR3: add more sources pertaining to your new ML model + l1 regularization]
 
 *UNet 3+: A full-scale connected unet for medical image segmentation* ([repo](https://github.com/ZJUGiveLab/UNet-Version)) ([article](https://arxiv.org/abs/2004.08790))
 
