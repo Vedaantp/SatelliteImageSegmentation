@@ -48,7 +48,7 @@ Once preprocessed, the training script needs an `ESDConfig` to run, the default 
 
 With the proper data loaded & parameters/model set, training can now begin. Connecting to Weights & Balances, the training script will output the results of each epoch to `wandb.ai`, allowing progress to be visible even away from the local machine.
 
-Once training is complete, a `models/` folder should have been created, containing the saved weights in a `last.ckpt` checkpoint file. Note that **due to the file size of our best performing model's `last.ckpt` file, we will be linking it here in this README.**. The trained model can further be evaluated with the `evaluate.py` and `evaluate_kaggle.ply` scripts.
+Once training is complete, a `models/` folder should have been created, containing the saved weights in a `last.ckpt` checkpoint file. Note that **due to the file size of our best performing model's `last.ckpt` file, we will be linking it here in this README,** in the [Models section](#models). The trained model can further be evaluated with the `evaluate.py` and `evaluate_kaggle.ply` scripts.
 
 ## Installation
 
@@ -89,12 +89,17 @@ Now you should be ready to run the commands to train the models on this dataset.
 
 ## Models 
 ### UNet
+**[Best Model](https://drive.google.com/file/d/1Nq5NvRo5cQajUyJg_8U_PvhVcx1o4Vsi/view?usp=sharing)**
+
 This model uses what is called a "skip connection", these are inspired by the nonlinear nature of brains, and are generally good at helping models "remember" informatiion that might have been lost as the network gets longer. These are done by saving the partial outputs of the networks, known as residuals, and appending them later to later partial outputs of the network. In our case, we have the output of the inc layer, as the first residual, and each layer but the last one as the rest of the residuals. Each residual and current partial output are then fed to the Decoder layer, which performs a reverse convolution (ConvTranspose2d) on the partial output, concatenates it to the residual and then performs another convolution. At the end, we end up with an output of the same resolution as the input, so we must MaxPool2d in order to make it the same resolution as our target mask.
 
 ![UNet](assets/unet.png)
 
 
 ### DeepLabV3
+**[Best Model with L1 Regularization](https://drive.google.com/file/d/1iYFRmWli05z9RiQW2VO0fvd8w785tKpV/view?usp=sharing)**
+**[Best Model without L1 Regularization](https://drive.google.com/file/d/1VJdZUyBr2BGWGcf2VH06i1DrMR4aIqIM/view?usp=sharing)**
+
 DeepLabV3 was designed specifically for semantic image segmentation, and this project's version employs a ResNet-101 backbone and pretrained weights. Similar to UNet, DeepLabV3 also utilizes an Encoder-Decoder architecture in combination with several other techniques like Atrous Convolution and Atrous Spatial Pyramid Pooling in order to maximize the capturing of data context over several scales. This ensure the model can both capture & consider finer details and broader patterns, assisting in segmentation. Another strength of this model is the ResNet-101 backbone, which also makes use of skip connections in order to assist in training. Specifically for DeepLabV3, ResNet is used as a feature extractor in an initial part of the network, with those details passed further down the DeepLabV3 architecture.
 
 ![DeepLabV3 graphic](assets/deeplab_architecture.webp)
