@@ -32,7 +32,7 @@ Developed by Brown Rice: [Levi Ramirez](https://github.com/Levi-Ramirez), [Shadi
         - `unet.py`: "From scratch" UNet implementation
         - `deepLabV3.py`: Wrapper for PyTorch's DeepLabV3 with ResNet-101 backbone & pretrained weights
         - `satellite_module.py`: Baseline class to help load proper model & parameters, abstracting to a single "satellite" class
-    - `preprocessing/`: Necessary functions & files for preprocessing data, including seperating images into subtiles & applying filters like gamma & brightness correction and gaussian filters
+    - `preprocessing/`: Necessary functions & files for preprocessing data, including applying augmentations/transformations and seperating these images into subtiles
     - `utilities.py`: Definition for basline `ESDConfig` class which specifies necessary parameters for training, including directories, valid satellite bands in the dataset, and hyperparameters like max_epochs & learning rate.
 
 ### Functionality
