@@ -254,12 +254,12 @@ In `src/utilities.py` we have created an `ESDConfig` dataclass to store all the 
 
 For example, if you would like to run training for the architecture UNet for seven epochs you would run:
 
-`python -m scripts.train --model_type=unet --max_epochs=7`
+`python -m scripts.train --model_type=UNet --max_epochs=7`
 
 ### Hyperparameter Sweeps
 - `sweeps.yml` is used to automate hyperparameter search over metrics such as batch size, epochs, learning rate, and optimizer.
 
-- To run training with the hyperparameter sweeps you define in `sweeps.yml`, run `python scripts/train_sweeps.py --sweep_file scripts/sweeps.yml`
+- To run training with the hyperparameter sweeps you define in `sweeps.yml`, run `python scripts/train_sweeps.py --sweep_file=scripts/sweeps.yml`
 
 - These sweeps will be logged in your wandb account
 
