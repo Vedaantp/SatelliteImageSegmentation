@@ -33,6 +33,12 @@ Developed by Brown Rice: [Levi Ramirez](https://github.com/Levi-Ramirez), [Shadi
         - `deepLabV3.py`: Wrapper for PyTorch's DeepLabV3 with ResNet-101 backbone & pretrained weights
         - `satellite_module.py`: Baseline class to help load proper model & parameters, abstracting to a single "satellite" class
     - `preprocessing/`: Necessary functions & files for preprocessing data, including applying augmentations/transformations and seperating these images into subtiles
+        - `file_utils.py` - defines a module for loading satellite imagery into data structures using the package [xarray](https://docs.xarray.dev/en/latest/index.html).
+        - `preprocess_sat.py` - is a module to preprocess satellite imagery by performing image enhancement and normalization techniques to prepare the data for exploratory data analysis and visualization using matplotlib.
+        - `subtile.py` - defines a class containing functions enabling the subtiling of satellite images
+    - `visualization/`: Necessary functions & files for visualizing data, including applying augmentations/transformations and seperating these images into subtiles
+        - `plot_utils.py` - includes a series of functions to visualize the data from different satellites
+        - `restich_plot.py` - contains functions to assist in restiching subtiles back together
     - `utilities.py`: Definition for basline `ESDConfig` class which specifies necessary parameters for training, including directories, valid satellite bands in the dataset, and hyperparameters like max_epochs & learning rate.
 
 ### Functionality
