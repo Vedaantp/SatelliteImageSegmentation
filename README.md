@@ -14,6 +14,36 @@ Developed by Brown Rice: [Levi Ramirez](https://github.com/Levi-Ramirez), [Shadi
 ## Goal
 **Society and Electricity Satellite Segmentation** targets semantic segmentation, seeking to adapt & use multiple models to achieve high classification accuracy  on the IEEE GRSS 2021 Data Fusion Contest dataset. We will compare the performance of DeepLabV3 with ResNet-101 against a base UNet model.
 
+## Project Overview
+**Society and Electricity Satellite Segmentation** is powered by PyTorch & PyTorch Lightning, with a "from-scratch" UNet implementation and PyTorch's DeepLabV3 models.
+
+### Directory
+- `assets/`: Visual graphics for documentation purposes
+- `data/`: Initially empty, contains `raw/` dataset folder. More details are included in [Getting Started](#getting-started) below
+- `scripts/`: Runnable Python scripts for evaluation & training
+    - `evaluate.py`: Loads model from a checkpoint file & plots graphic, comparing the ground truth with the prediction
+    - `evaluate_kaggle.py`: Creates CSV file for test dataset evaluation on Kaggle
+    - `sweeps.yml`: Sweeps configuration file that specifies different attributes and their accepted ranges/values
+    - `train.py`: Script to conduct model training. If images aren't preprocessed, they will be processed & stored in the `data/` folder
+    - `train_sweepys.py`: Similar to `train.py` but conducts wide array of iterative runs with different hyperparameters based on `sweeps.yml`
+- `src/`: Contains necessary modules & source code for models, preprocessing, visualization, & training
+    - `esd_data/`: Definitions & handlers for the dataset, including augmentations and logic for loading and handling
+    - `models/supervised/`: Definitions for several PyTorch compatible models for training on the IEEE GRSS dataset. Of note, there are:
+        - `unet.py`: "From scratch" UNet implementation
+        - `deepLabV3.py`: Wrapper for PyTorch's DeepLabV3 with ResNet-101 backbone & pretrained weights
+        - `satellite_module.py`: Baseline class to help load proper model & parameters, abstracting to a single "satellite" class
+    - `preprocessing/`: Necessary functions & files for preprocessing data, including seperating images into subtiles & applying filters like gamma & brightness correction and gaussian filters
+    - `utilities.py`: Definition for basline `ESDConfig` class which specifies necessary parameters for training, including directories, valid satellite bands in the dataset, and hyperparameters like max_epochs & learning rate.
+
+### Functionality
+For training to work, the downloaded IEEE GRSS dataset must be present in the `data/raw/` folder. The training script will check for the presence of preprocessed tiles (which are placed in `data/processed/`), preprocessing all necessary resources if missing.
+
+Once preprocessed, the training script needs an `ESDConfig` to run, the default of which is located in the `src/utilities.py` file. In order to change hyperparameters like the model type, batch size, max epochs and more, the default `ESDConfig` can be changed or command-line arguments like `--model_type` can be inputted when running the training script.
+
+With the proper data loaded & parameters/model set, training can now begin. Connecting to Weights & Balances, the training script will output the results of each epoch to `wandb.ai`, allowing progress to be visible even away from the local machine.
+
+Once training is complete, a `models/` folder should have been created, containing the saved weights in a `last.ckpt` checkpoint file. Note that **due to the file size of our best performing model's `last.ckpt` file, we will be linking it here in this README.**. The trained model can further be evaluated with the `evaluate.py` and `evaluate_kaggle.ply` scripts.
+
 ## Installation
 
 The code requires `python>=3.11.3`, as well as `pytorch>=2.3` and `torchvision>=0.18`. Please follow the instructions [here](https://realpython.com/installing-python/) to install both python if you don't have it installed already. All other dependencies (including pytorch) will be installed using the following steps:
