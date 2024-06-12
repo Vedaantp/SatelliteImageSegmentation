@@ -104,10 +104,12 @@ DeepLabV3 also performed well, but overall ended barely short of the results fro
 The above results are from training with L1 Regularization across 150 epochs
 
 
-
 ![deeplabv3 without L1 results](assets/deeplab_noreg.png)
 
 The above results are from training without L1 Regularization across 150 epochs
+
+
+![deeplabv3 evaluation results](assets/deeplab_eval.png)
 
 
 
