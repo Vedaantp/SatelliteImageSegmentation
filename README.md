@@ -24,8 +24,9 @@ Developed by Brown Rice: [Levi Ramirez](https://github.com/Levi-Ramirez), [Shadi
 **Society and Electricity Satellite Segmentation** is powered by PyTorch & PyTorch Lightning, with a "from-scratch" UNet implementation and PyTorch's DeepLabV3 models.
 
 ### Directory
-- `assets/`: Visual graphics for documentation purposes
+- `assets/`: 'data_folder' - Visual graphics for documentation purpose
 - `data/`: Initially empty, contains `raw/` dataset folder. More details are included in [Getting Started](#getting-started) below
+- `models/`: 'model folder' - contains checkpoints after each model run. Also contains a text file linking to author's best models.
 - `scripts/`: Runnable Python scripts for evaluation & training
     - `evaluate.py`: Loads model from a checkpoint file & plots graphic, comparing the ground truth with the prediction
     - `evaluate_kaggle.py`: Creates CSV file for test dataset evaluation on Kaggle
@@ -34,18 +35,22 @@ Developed by Brown Rice: [Levi Ramirez](https://github.com/Levi-Ramirez), [Shadi
     - `train_sweepys.py`: Similar to `train.py` but conducts wide array of iterative runs with different hyperparameters based on `sweeps.yml`
 - `src/`: Contains necessary modules & source code for models, preprocessing, visualization, & training
     - `esd_data/`: Definitions & handlers for the dataset, including augmentations and logic for loading and handling
+        - `agumentations.py`: 'transformations' - provides functions for augmentations
+        - `datamodule.py`: 'data module' - manages training, validation, and testing dataloaders, as well as steps that may be required for transformations
+        - `dataset.py`: 'dataset class' - PyTorch Dataset class definition for creating batches in a DataLoader
     - `models/supervised/`: Definitions for several PyTorch compatible models for training on the IEEE GRSS dataset. Of note, there are:
         - `unet.py`: "From scratch" UNet implementation
         - `deepLabV3.py`: Wrapper for PyTorch's DeepLabV3 with ResNet-101 backbone & pretrained weights
         - `satellite_module.py`: Baseline class to help load proper model & parameters, abstracting to a single "satellite" class
     - `preprocessing/`: Necessary functions & files for preprocessing data, including applying augmentations/transformations and seperating these images into subtiles
-        - `file_utils.py` - defines a module for loading satellite imagery into data structures using the package [xarray](https://docs.xarray.dev/en/latest/index.html).
-        - `preprocess_sat.py` - is a module to preprocess satellite imagery by performing image enhancement and normalization techniques to prepare the data for exploratory data analysis and visualization using matplotlib.
-        - `subtile.py` - defines a class containing functions enabling the subtiling of satellite images
+        - `file_utils.py`: 'dataloader'- defines a module for loading satellite imagery into data structures using the package [xarray](https://docs.xarray.dev/en/latest/index.html).
+        - `preprocess_sat.py` 'data_utils' - is a module to preprocess satellite imagery by performing image enhancement and normalization techniques to prepare the data for exploratory data analysis and visualization using matplotlib.
+        - `subtile.py` 'data_utils' - defines a class containing functions enabling the subtiling of satellite images
     - `visualization/`: Necessary functions & files for visualizing data, including applying augmentations/transformations and seperating these images into subtiles
         - `plot_utils.py` - includes a series of functions to visualize the data from different satellites
         - `restich_plot.py` - contains functions to assist in restiching subtiles back together
     - `utilities.py`: Definition for basline `ESDConfig` class which specifies necessary parameters for training, including directories, valid satellite bands in the dataset, and hyperparameters like max_epochs & learning rate.
+- `requirements.txt`: requirments file for reproducing the analysis environment.
 
 ### Functionality
 For training to work, the downloaded IEEE GRSS dataset must be present in the `data/raw/` folder. The training script will check for the presence of preprocessed tiles (which are placed in `data/processed/`), preprocessing all necessary resources if missing.
