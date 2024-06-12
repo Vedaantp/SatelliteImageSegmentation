@@ -3,9 +3,12 @@ __pycache__/
 *.py[cod]
 *$py.class
 cs175env/
-data/
 wandb/
 model_weights
+
+# Ignore all files in data but not the dir itself
+data/*
+!data/
 
 # Virtual environment
 esdenv/
