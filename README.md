@@ -1,6 +1,6 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/6ndC2138)
 
-# Society and Electricity Satellite Segmentation: A comparison of UNet with [a select model: TBD]
+# Society and Electricity Satellite Segmentation: A comparison of UNet with DeepLabV3
 ![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=for-the-badge&logo=PyTorch&logoColor=white)
 ![PyTorch Lightning](https://img.shields.io/badge/pytorch-lightning-blue.svg?logo=PyTorch%20Lightning)
 ![NumPy](https://img.shields.io/badge/numpy-%23013243.svg?style=for-the-badge&logo=numpy&logoColor=white)
@@ -11,10 +11,8 @@ The final project for UCI's CS 175: Project in Artificial Intelligence.
 
 Developed by Brown Rice: [Levi Ramirez](https://github.com/Levi-Ramirez), [Shadi Bitaraf](https://github.com/ShadiBitaraf), [Vedaant Patel](https://github.com/Vedaantp), [Benjamin Wong](https://github.com/chiyeon)
 
-NOTE: anything that is in '[ ]' is in progress and will be delivered in the final PR.
-
 ## Goal
-**Society and Electricity Satellite Segmentation** targets semantic segmentation, seeking to adapt & use multiple models to achieve high classification accuracy  on the IEEE GRSS 2021 Data Fusion Contest dataset. We will compare the performance of [select models] against a base UNet model. The model we want to compare UNet to is still in production. However, we expect it to be either UNet3+ or DeepLabV3.
+**Society and Electricity Satellite Segmentation** targets semantic segmentation, seeking to adapt & use multiple models to achieve high classification accuracy  on the IEEE GRSS 2021 Data Fusion Contest dataset. We will compare the performance of DeepLabV3 with ResNet-101 against a base UNet model.
 
 ## Installation
 
@@ -60,20 +58,31 @@ This model uses what is called a "skip connection", these are inspired by the no
 ![UNet](assets/unet.png)
 
 
-### [ model for comparison TBD ]
-> Here we will write an in depth description of why we chose our particular model, listing its strengths and how well it works with the dataset. If the model was take from somewhere, we would credit the original authors & also note any changes we made here. This model will likely be UNet3+ or DeepLabV3.
+### DeepLabV3
+DeepLabV3 was designed specifically for semantic image segmentation, and this project's version employs a ResNet-101 backbone and pretrained weights. Similar to UNet, DeepLabV3 also utilizes an Encoder-Decoder architecture in combination with several other techniques like Atrous Convolution and Atrous Spatial Pyramid Pooling in order to maximize the capturing of data context over several scales. This ensure the model can both capture & consider finer details and broader patterns, assisting in segmentation. Another strength of this model is the ResNet-101 backbone, which also makes use of skip connections in order to assist in training. Specifically for DeepLabV3, ResNet is used as a feature extractor in an initial part of the network, with those details passed further down the DeepLabV3 architecture.
+
+![DeepLabV3 graphic](assets/deeplab_architecture.webp)
+
+Graphic from [DeepLabV3 Ultimate Guide](https://learnopencv.com/deeplabv3-ultimate-guide/)
 
 ## Performance
 ### UNet
 The UNet model performed well and achieved an accuracy high of 67% on the validation set. For run 1 through 4 in the table, Sentinel 1 and Sentinel 2 bands were used. For run 5, Sentinel 1, Sentinel 2, VIIRS, and VIIRS MAX Projection were used. For run 6, all bands were used.
 
 ![UNet-Prediction-1](assets/UNet-Pred1.png) 
+
 ![UNet-Prediction-2](assets/UNet-Pred2.png)
+
 ![UNet-F1-Score](assets/UNet-F1-Score.png)
+
 ![UNet-Val-Accuracy](assets/UNet-Val-Accuracy.png) 
+
 ![UNet-Val-Loss](assets/UNet-Val-Loss.png)
+
 ![UNet-Training-Accuracy](assets/UNet-Train-Accuracy.png) 
+
 ![UNet-Training-Loss](assets/UNet-Train-Loss.png)
+
 
 **Note:** The F1 score was set to be logged later on in the sweeps that were ran, so some of the runs do not include an F1 score.
 
@@ -87,15 +96,32 @@ The UNet model performed well and achieved an accuracy high of 67% on the valida
 | 25 | 0.66 | 0.72 | 0.61 | 0.69 | 0.83 | 256 | 99 | 0.0005 | 5 |
 
 
-### [selected model: TBD]
-> We can include & compare to as many models as need be.
-> Here we would do the same as we did above for UNet, but for the model we choose to select for training and comparision (which is tbd in PR3)
+### DeepLabV3
+DeepLabV3 also performed well, but overall ended barely short of the results from UNet. Still, DeepLabV3 peaked at a validation accuracy of 72% with regularization.
 
-| Epochs | F1 Score | Training Accuracy | Training Loss | Validation Accuracy | Validation Loss |
-| ------ | -------- | ----------------- | ------------- | ------------------- | --------------- |
-| 10 | 0.0 | 0.0 | 0 | 0.0 | 0 |
-| 20 | 0.0 | 0.0 | 0 | 0.0 | 0 |
-| 30 | 0.0 | 0.0 | 0 | 0.0 | 0 |
+![deeplabv3 with L1 regularization results](assets/deeplab_f1_valacc_epochs.png)
+
+The above results are from training with L1 Regularization across 150 epochs
+
+
+![deeplabv3 without L1 results](assets/deeplab_noreg.png)
+
+The above results are from training without L1 Regularization across 150 epochs
+
+
+![deeplabv3 evaluation results](assets/deeplab_eval.png)
+
+
+
+| Epochs | F1 Score | Training Loss | Validation Accuracy | Validation Loss |
+| ------ | -------- | ------------- | ------------------- | --------------- |
+| 1 | 0.42 | 214.71 | 0.55 | 1.11 |
+| 50 | 0.59 | 2.32 | 0.63 | 0.87 |
+| 100 | 0.64 | 1.74 | 0.65 | 1.17 |
+| 125 | 0.46 | 1.64 | 0.66 | 0.95 |
+| 150 | 0.62 | 1.54 | 0.63 | 0.94 |
+
+Above results are from training on optimal parameters over 150 epochs with L1 Regularization
 
 ## Dataset
 
@@ -225,9 +251,11 @@ This project is licensed under the [MIT License](LICENSE)
 
 *UNet 3+: A full-scale connected unet for medical image segmentation* ([repo](https://github.com/ZJUGiveLab/UNet-Version)) ([article](https://arxiv.org/abs/2004.08790))
 
+[DeepLabV3 Ultimate Guide](https://learnopencv.com/deeplabv3-ultimate-guide/) - Resource for learning & graphics
+
 ## Citing this project
 
-If you use **Society and Electricity Satellite Segmentation: A comparison of UNet with [a select model: TBD]** in your research, please use the following BibTeX entry:
+If you use **Society and Electricity Satellite Segmentation: A comparison of UNet with DeepLabV3** in your research, please use the following BibTeX entry:
 
 ```bibtex
 @misc{final-project-brown-rice,
