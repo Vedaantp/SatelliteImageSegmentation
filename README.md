@@ -40,6 +40,8 @@ Developed by Brown Rice: [Levi Ramirez](https://github.com/Levi-Ramirez), [Shadi
         - `datamodule.py`: 'data module' - manages training, validation, and testing dataloaders, as well as steps that may be required for transformations
         - `dataset.py`: 'dataset class' - PyTorch Dataset class definition for creating batches in a DataLoader
     - `models/supervised/`: Definitions for several PyTorch compatible models for training on the IEEE GRSS dataset. Of note, there are:
+        - `segmentation_cnn.py`: Defines a basic CNN that performs segmentation
+        - `resnet_transfer`: Defines the FCNResnetTransfer class which loads the fcn_resnet101 model from torch hub and applies modificiations
         - `unet.py`: "From scratch" UNet implementation
         - `deepLabV3.py`: Wrapper for PyTorch's DeepLabV3 with ResNet-101 backbone & pretrained weights
         - `satellite_module.py`: Baseline class to help load proper model & parameters, abstracting to a single "satellite" class
