@@ -88,7 +88,11 @@ def train(options: ESDConfig):
     )
 
     # run trainer.fit
-    trainer.fit(model, datamodule)
+    if options.checkpoint_file != "":
+        trainer.fit(model, datamodule, ckpt_path=options.checkpoint_file)
+    else:
+        trainer.fit(model, datamodule)
+
     return
 
 
@@ -121,6 +125,9 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "-p", "--processed_dir", type=str, default=config.processed_dir, help="."
+    )
+    parser.add_argument(
+        "--checkpoint_file", type=str, default="", help="."
     )
 
     parser.add_argument(

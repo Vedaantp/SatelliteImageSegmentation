@@ -1,0 +1,5 @@
+NOTE: our best models are linked in our ReadMe.
+
+UNet: https://drive.google.com/file/d/1Nq5NvRo5cQajUyJg_8U_PvhVcx1o4Vsi/view?usp=sharing
+DeepLabV3 w/o L1 regularization: https://drive.google.com/file/d/1iYFRmWli05z9RiQW2VO0fvd8w785tKpV/view?usp=sharing
+DeepLabV3 with L1 regularization: https://drive.google.com/file/d/1VJdZUyBr2BGWGcf2VH06i1DrMR4aIqIM/view?usp=sharing

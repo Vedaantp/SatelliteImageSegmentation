@@ -1,6 +1,6 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/6ndC2138)
 
-# Society and Electricity Satellite Segmentation: A comparison of UNet with [a select model: TBD]
+# Society and Electricity Satellite Segmentation: A comparison of UNet with DeepLabV3
 ![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=for-the-badge&logo=PyTorch&logoColor=white)
 ![PyTorch Lightning](https://img.shields.io/badge/pytorch-lightning-blue.svg?logo=PyTorch%20Lightning)
 ![NumPy](https://img.shields.io/badge/numpy-%23013243.svg?style=for-the-badge&logo=numpy&logoColor=white)
@@ -11,10 +11,58 @@ The final project for UCI's CS 175: Project in Artificial Intelligence.
 
 Developed by Brown Rice: [Levi Ramirez](https://github.com/Levi-Ramirez), [Shadi Bitaraf](https://github.com/ShadiBitaraf), [Vedaant Patel](https://github.com/Vedaantp), [Benjamin Wong](https://github.com/chiyeon)
 
-NOTE: anything that is in '[ ]' is in progress and will be delivered in the final PR.
-
 ## Goal
-**Society and Electricity Satellite Segmentation** targets semantic segmentation, seeking to adapt & use multiple models to achieve high classification accuracy  on the IEEE GRSS 2021 Data Fusion Contest dataset. We will compare the performance of [select models] against a base UNet model. The model we want to compare UNet to is still in production. However, we expect it to be either UNet3+ or DeepLabV3.
+**Society and Electricity Satellite Segmentation** targets semantic segmentation, seeking to adapt & use multiple models to achieve high classification accuracy  on the IEEE GRSS 2021 Data Fusion Contest dataset. We will compare the performance of DeepLabV3 with ResNet-101 against a base UNet model.
+
+## Links
+- [Presentation Video](https://drive.google.com/file/d/1YdW6rR6Sz3B7gmHiJ_T-qmvrKQmNhJTZ/view?usp=drive_link) (4:58) 
+- [Presentation Slides](https://docs.google.com/presentation/d/1m1j8AbW45G5winhdcOWOZE1Pqv9NMdlVqWHvgyn3Nds/edit?usp=drive_link)
+- [Technical Memorandum](https://docs.google.com/document/d/1BZ-9eep69z8YbXZpjtSkoP2Gme51i3fY3ekawlDdacY/edit?usp=sharing)
+- [Project Poster](https://docs.google.com/presentation/d/1s1OpdS_f0XRhgllhzwgc2pmB7fn-TECbbmF9jXd8tl0/edit?usp=drive_link)
+
+## Project Overview/Architecture
+**Society and Electricity Satellite Segmentation** is powered by PyTorch & PyTorch Lightning, with a "from-scratch" UNet implementation and PyTorch's DeepLabV3 models.
+
+### Directory
+**NOTE: Some directories/files are followed by another name in quotations to assist in project assignment name verification.**
+- `assets/`: 'data_folder' - Visual graphics for documentation purpose
+- `data/`: Initially empty, contains `raw/` dataset folder. More details are included in [Getting Started](#getting-started) below
+- `models/`: 'model folder' - contains checkpoints after each model run. Also contains a text file linking to author's best models.
+- `scripts/`: Runnable Python scripts for evaluation & training
+    - `evaluate.py`: Loads model from a checkpoint file & plots graphic, comparing the ground truth with the prediction
+    - `evaluate_kaggle.py`: Creates CSV file for test dataset evaluation on Kaggle
+    - `sweeps.yml`: Sweeps configuration file that specifies different attributes and their accepted ranges/values
+    - `train.py`: Script to conduct model training. If images aren't preprocessed, they will be processed & stored in the `data/` folder
+    - `train_sweepys.py`: Similar to `train.py` but conducts wide array of iterative runs with different hyperparameters based on `sweeps.yml`
+- `src/`: Contains necessary modules & source code for models, preprocessing, visualization, & training
+    - `esd_data/`: Definitions & handlers for the dataset, including augmentations and logic for loading and handling
+        - `agumentations.py`: 'transformations' - provides functions for augmentations
+        - `datamodule.py`: 'data module' - manages training, validation, and testing dataloaders, as well as steps that may be required for transformations
+        - `dataset.py`: 'dataset class' - PyTorch Dataset class definition for creating batches in a DataLoader
+    - `models/supervised/`: Definitions for several PyTorch compatible models for training on the IEEE GRSS dataset. Of note, there are:
+        - `segmentation_cnn.py`: Defines a basic CNN that performs segmentation
+        - `resnet_transfer`: Defines the FCNResnetTransfer class which loads the fcn_resnet101 model from torch hub and applies modificiations
+        - `unet.py`: "From scratch" UNet implementation
+        - `deepLabV3.py`: Wrapper for PyTorch's DeepLabV3 with ResNet-101 backbone & pretrained weights
+        - `satellite_module.py`: Baseline class to help load proper model & parameters, abstracting to a single "satellite" class
+    - `preprocessing/`: Necessary functions & files for preprocessing data, including applying augmentations/transformations and seperating these images into subtiles
+        - `file_utils.py`: 'dataloader'- defines a module for loading satellite imagery into data structures using the package [xarray](https://docs.xarray.dev/en/latest/index.html).
+        - `preprocess_sat.py` 'data_utils' - is a module to preprocess satellite imagery by performing image enhancement and normalization techniques to prepare the data for exploratory data analysis and visualization using matplotlib.
+        - `subtile.py` 'data_utils' - defines a class containing functions enabling the subtiling of satellite images
+    - `visualization/`: Necessary functions & files for visualizing data, including applying augmentations/transformations and seperating these images into subtiles
+        - `plot_utils.py` - includes a series of functions to visualize the data from different satellites
+        - `restich_plot.py` - contains functions to assist in restiching subtiles back together
+    - `utilities.py`: Definition for basline `ESDConfig` class which specifies necessary parameters for training, including directories, valid satellite bands in the dataset, and hyperparameters like max_epochs & learning rate.
+- `requirements.txt`: requirments file for reproducing the analysis environment.
+
+### Functionality
+For training to work, the downloaded IEEE GRSS dataset must be present in the `data/raw/` folder. The training script will check for the presence of preprocessed tiles (which are placed in `data/processed/`), preprocessing all necessary resources if missing.
+
+Once preprocessed, the training script needs an `ESDConfig` to run, the default of which is located in the `src/utilities.py` file. In order to change hyperparameters like the model type, batch size, max epochs and more, the default `ESDConfig` can be changed or command-line arguments like `--model_type` can be inputted when running the training script.
+
+With the proper data loaded & parameters/model set, training can now begin. Connecting to Weights & Balances, the training script will output the results of each epoch to `wandb.ai`, allowing progress to be visible even away from the local machine.
+
+Once training is complete, a `models/` folder should have been created, containing the saved weights in a `last.ckpt` checkpoint file. Note that **due to the file size of our best performing model's `last.ckpt` file, we will be linking it here in this README,** in the [Models section](#models). The trained model can further be evaluated with the `evaluate.py` and `evaluate_kaggle.ply` scripts.
 
 ## Installation
 
@@ -55,25 +103,41 @@ Now you should be ready to run the commands to train the models on this dataset.
 
 ## Models 
 ### UNet
+**[Best Model](https://drive.google.com/file/d/1Nq5NvRo5cQajUyJg_8U_PvhVcx1o4Vsi/view?usp=sharing)**
+
 This model uses what is called a "skip connection", these are inspired by the nonlinear nature of brains, and are generally good at helping models "remember" informatiion that might have been lost as the network gets longer. These are done by saving the partial outputs of the networks, known as residuals, and appending them later to later partial outputs of the network. In our case, we have the output of the inc layer, as the first residual, and each layer but the last one as the rest of the residuals. Each residual and current partial output are then fed to the Decoder layer, which performs a reverse convolution (ConvTranspose2d) on the partial output, concatenates it to the residual and then performs another convolution. At the end, we end up with an output of the same resolution as the input, so we must MaxPool2d in order to make it the same resolution as our target mask.
 
 ![UNet](assets/unet.png)
 
 
-### [ model for comparison TBD ]
-> Here we will write an in depth description of why we chose our particular model, listing its strengths and how well it works with the dataset. If the model was take from somewhere, we would credit the original authors & also note any changes we made here. This model will likely be UNet3+ or DeepLabV3.
+### DeepLabV3
+**[Best Model with L1 Regularization](https://drive.google.com/file/d/1iYFRmWli05z9RiQW2VO0fvd8w785tKpV/view?usp=sharing)**
+**[Best Model without L1 Regularization](https://drive.google.com/file/d/1VJdZUyBr2BGWGcf2VH06i1DrMR4aIqIM/view?usp=sharing)**
+
+DeepLabV3 was designed specifically for semantic image segmentation, and this project's version employs a ResNet-101 backbone and pretrained weights. Similar to UNet, DeepLabV3 also utilizes an Encoder-Decoder architecture in combination with several other techniques like Atrous Convolution and Atrous Spatial Pyramid Pooling in order to maximize the capturing of data context over several scales. This ensure the model can both capture & consider finer details and broader patterns, assisting in segmentation. Another strength of this model is the ResNet-101 backbone, which also makes use of skip connections in order to assist in training. Specifically for DeepLabV3, ResNet is used as a feature extractor in an initial part of the network, with those details passed further down the DeepLabV3 architecture.
+
+![DeepLabV3 graphic](assets/deeplab_architecture.webp)
+
+Graphic from [DeepLabV3 Ultimate Guide](https://learnopencv.com/deeplabv3-ultimate-guide/)
 
 ## Performance
 ### UNet
 The UNet model performed well and achieved an accuracy high of 67% on the validation set. For run 1 through 4 in the table, Sentinel 1 and Sentinel 2 bands were used. For run 5, Sentinel 1, Sentinel 2, VIIRS, and VIIRS MAX Projection were used. For run 6, all bands were used.
 
 ![UNet-Prediction-1](assets/UNet-Pred1.png) 
+
 ![UNet-Prediction-2](assets/UNet-Pred2.png)
+
 ![UNet-F1-Score](assets/UNet-F1-Score.png)
+
 ![UNet-Val-Accuracy](assets/UNet-Val-Accuracy.png) 
+
 ![UNet-Val-Loss](assets/UNet-Val-Loss.png)
+
 ![UNet-Training-Accuracy](assets/UNet-Train-Accuracy.png) 
+
 ![UNet-Training-Loss](assets/UNet-Train-Loss.png)
+
 
 **Note:** The F1 score was set to be logged later on in the sweeps that were ran, so some of the runs do not include an F1 score.
 
@@ -87,15 +151,32 @@ The UNet model performed well and achieved an accuracy high of 67% on the valida
 | 25 | 0.66 | 0.72 | 0.61 | 0.69 | 0.83 | 256 | 99 | 0.0005 | 5 |
 
 
-### [selected model: TBD]
-> We can include & compare to as many models as need be.
-> Here we would do the same as we did above for UNet, but for the model we choose to select for training and comparision (which is tbd in PR3)
+### DeepLabV3
+DeepLabV3 also performed well, but overall ended barely short of the results from UNet. Still, DeepLabV3 peaked at a validation accuracy of 72% with regularization.
 
-| Epochs | F1 Score | Training Accuracy | Training Loss | Validation Accuracy | Validation Loss |
-| ------ | -------- | ----------------- | ------------- | ------------------- | --------------- |
-| 10 | 0.0 | 0.0 | 0 | 0.0 | 0 |
-| 20 | 0.0 | 0.0 | 0 | 0.0 | 0 |
-| 30 | 0.0 | 0.0 | 0 | 0.0 | 0 |
+![deeplabv3 with L1 regularization results](assets/deeplab_f1_valacc_epochs.png)
+
+The above results are from training with L1 Regularization across 150 epochs
+
+
+![deeplabv3 without L1 results](assets/deeplab_noreg.png)
+
+The above results are from training without L1 Regularization across 150 epochs
+
+
+![deeplabv3 evaluation results](assets/deeplab_eval.png)
+
+
+
+| Epochs | F1 Score | Training Loss | Validation Accuracy | Validation Loss |
+| ------ | -------- | ------------- | ------------------- | --------------- |
+| 1 | 0.42 | 214.71 | 0.55 | 1.11 |
+| 50 | 0.59 | 2.32 | 0.63 | 0.87 |
+| 100 | 0.64 | 1.74 | 0.65 | 1.17 |
+| 125 | 0.46 | 1.64 | 0.66 | 0.95 |
+| 150 | 0.62 | 1.54 | 0.63 | 0.94 |
+
+Above results are from training on optimal parameters over 150 epochs with L1 Regularization
 
 ## Dataset
 
@@ -181,12 +262,12 @@ In `src/utilities.py` we have created an `ESDConfig` dataclass to store all the 
 
 For example, if you would like to run training for the architecture UNet for seven epochs you would run:
 
-`python -m scripts.train --model_type=unet --max_epochs=7`
+`python -m scripts.train --model_type=UNet --max_epochs=7`
 
 ### Hyperparameter Sweeps
 - `sweeps.yml` is used to automate hyperparameter search over metrics such as batch size, epochs, learning rate, and optimizer.
 
-- To run training with the hyperparameter sweeps you define in `sweeps.yml`, run `python scripts/train_sweeps.py --sweep_file scripts/sweeps.yml`
+- To run training with the hyperparameter sweeps you define in `sweeps.yml`, run `python scripts/train_sweeps.py --sweep_file=scripts/sweeps.yml`
 
 - These sweeps will be logged in your wandb account
 
@@ -196,8 +277,9 @@ For example, if you would like to run training for the architecture UNet for sev
 
       MODEL = 'MODEL_NAME'
 
-## [Pipeline]
-> [TODO PR3: impelment pipeline diagram once architecture is finalized]
+## Pipeline
+Full machine learning pipeline + evaluate.py pipeline
+<img src="assets/mlPipelineV3.png" alt="machine learning pipeline">
 
 ## Liscense
 
@@ -216,15 +298,17 @@ This project is licensed under the [MIT License](LICENSE)
 
 [Cook Your First UNET in Pytorch](https://towardsdatascience.com/cook-your-first-u-net-in-pytorch-b3297a844cf3)
 
+[Pytorch DeepLabV3](https://pytorch.org/vision/main/models/deeplabv3.html)
+
 [HW03: Semantic Segmentation and Model Monitoring](https://github.com/cs175cv-s2024/hw3-semantic-segmentation-brown-rice)
 
 [Wandb Quickstart](https://docs.wandb.ai/quickstart)
 
-[PR3: add more sources pertaining to your new ML model + l1 regularization]
+[DeepLabV3 Ultimate Guide](https://learnopencv.com/deeplabv3-ultimate-guide/) - Resource for learning & graphics
 
 ## Citing this project
 
-If you use **Society and Electricity Satellite Segmentation: A comparison of UNet with [a select model: TBD]** in your research, please use the following BibTeX entry:
+If you use **Society and Electricity Satellite Segmentation: A comparison of UNet with DeepLabV3** in your research, please use the following BibTeX entry:
 
 ```bibtex
 @misc{final-project-brown-rice,

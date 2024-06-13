@@ -23,7 +23,7 @@ def main(options):
     datamodule.prepare_data()
     datamodule.setup("fit")
     # load model from checkpoint
-    model = ESDSegmentation.load_from_checkpoint(options.model_path)
+    model = ESDSegmentation.load_from_checkpoint(options.model_path).cpu() #.cpu() sends model weights to CPU
     # set model to eval mode
     model.eval()
     # get a list of all processed tiles
