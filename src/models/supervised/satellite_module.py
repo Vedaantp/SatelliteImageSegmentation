@@ -6,7 +6,6 @@ import torchmetrics
 
 from src.models.supervised.unet import UNet
 from src.models.supervised.deepLabV3 import DeepLabV3Module
-from src.models.supervised.unet_3plus import UNet_3Plus
 from src.models.supervised.resnet_transfer import FCNResnetTransfer
 from src.models.supervised.segmentation_cnn import SegmentationCNN
 
@@ -32,8 +31,6 @@ class ESDSegmentation(pl.LightningModule):
         # initialize model based on model_type str:
         if model_type.lower() == "unet":
             self.model = UNet(in_channels=in_channels, out_channels=out_channels, **model_params)
-        elif model_type.lower() == "unet3+":
-            self.model = UNet_3Plus(in_channels=in_channels, n_classes=out_channels)
         elif model_type.lower() == "segmentation_cnn":
             self.model = SegmentationCNN(in_channels=in_channels, out_channels=out_channels, **model_params)
         elif model_type.lower() == "fcn_resnet_transfer":
